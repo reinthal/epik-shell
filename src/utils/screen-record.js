@@ -4,23 +4,7 @@ import { interval } from "astal";
 
 const HOME = GLib.get_home_dir();
 
-@register({
-  GTypeName: "Screenrecord",
-  Properties: {
-    recording: GObject.ParamSpec.boolean(
-      "recording",
-      "Record Indicator",
-      "Read only boolean property",
-      GObject.ParamFlags.READABLE,
-    ),
-    timer: GObject.ParamSpec.int(
-      "timer",
-      "Record Timer",
-      "Read only number property",
-      GObject.ParamFlags.READABLE,
-    ),
-  },
-})
+@register({ GTypeName: "Screenrecord" })
 export default class ScreenRecord extends GObject.Object {
   static instance = null;
 
@@ -34,12 +18,17 @@ export default class ScreenRecord extends GObject.Object {
   #file = "";
   #interval = "";
 
+  #recording = false;
+  #timer = 0;
+
+  @property(Boolean)
   get recording() {
-    return this._recording;
+    return this.#recording;
   }
 
+  @property(Number)
   get timer() {
-    return this._timer;
+    return this.#timer;
   }
 
   async start() {
@@ -51,21 +40,21 @@ export default class ScreenRecord extends GObject.Object {
       `wf-recorder -g "${await sh("slurp")}" -f ${this.#file} --pixel-format yuv420p`,
     );
 
-    this._recording = true;
+    this.#recording = true;
     this.notify("recording");
 
-    this._timer = 0;
+    this.#timer = 0;
     this.#interval = interval(1000, () => {
       this.notify("timer");
-      this._timer++;
+      this.#timer++;
     });
   }
 
   async stop() {
-    if (!this._recording) return;
+    if (!this.#recording) return;
 
     await bash("killall -INT wf-recorder");
-    this._recording = false;
+    this.#recording = false;
     this.notify("recording");
     this.#interval.cancel();
 
