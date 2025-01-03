@@ -1,0 +1,33 @@
+@use "../variable.scss" as *;
+@use "../colors.scss" as *;
+@use "sass:color";
+
+.dock-container {
+  padding: 0.4rem;
+  overlay {
+    .app-button {
+      padding: 0.6rem;
+    }
+
+    .indicator {
+      min-width: 5px;
+      min-height: 5px;
+      border-radius: 99px;
+      background-color: $foreground;
+      margin-bottom: 1px;
+    }
+
+    &.focused {
+      .indicator {
+        background-color: $background;
+      }
+      .app-button {
+        box-shadow: 0 0 0 calc($border-width/3) $border-color;
+        background-color: $foreground;
+        image {
+          color: $background;
+        }
+      }
+    }
+  }
+}

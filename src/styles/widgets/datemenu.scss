@@ -1,0 +1,36 @@
+@use "../variable" as *;
+@use "../colors" as *;
+
+.datemenu-container {
+  padding: 0.7rem;
+
+  .time {
+    font-size: 1.5rem;
+  }
+
+  .date {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  calendar {
+    all: unset;
+    background-color: transparent;
+    border: none;
+
+    header {
+      padding-bottom: 0.3rem;
+    }
+
+    .day-number {
+      &:selected {
+        color: $background;
+        background-color: $foreground;
+      }
+    }
+    .today {
+      border-radius: $border-radius;
+      box-shadow: 0 0 0 0.1rem $foreground;
+    }
+  }
+}

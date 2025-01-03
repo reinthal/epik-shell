@@ -1,0 +1,68 @@
+@use "sass:color";
+@use "sass:math";
+@use "../variable" as *;
+@use "../colors" as *;
+
+.notification-container {
+  padding: 0.7rem;
+
+  &.critical {
+    box-shadow:
+      0 0 0 0.1rem $dark-red,
+      0.5rem 0.5rem 0 0 $dark-red;
+  }
+
+  > box {
+    min-width: 350px;
+  }
+
+  .header {
+    .time {
+      margin-right: 0.5rem;
+    }
+
+    button {
+      background-color: transparent;
+      padding: 0 0.3rem;
+      border-radius: calc($border-radius / 2);
+      box-shadow: 0 0 0 0.1rem color.adjust($foreground, $alpha: -0.8);
+    }
+  }
+
+  separator {
+    margin: 0.4rem 0;
+  }
+
+  .content {
+    .summary {
+      font-size: 1.2em;
+    }
+
+    .image image {
+      border-radius: calc($border-radius / 1.5);
+      min-width: 60px;
+      min-height: 60px;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+
+  .actions {
+    margin-top: 0.5rem;
+    button {
+      margin: 0 0.3rem;
+      padding: 0.2rem 0;
+      background-color: transparent;
+      border-radius: calc($border-radius / 2);
+      box-shadow: 0 0 0 0.1rem color.adjust($foreground, $alpha: -0.8);
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@use "sass:color";
+@use "../variable.scss" as *;
+@use "../colors.scss" as *;
+
+.applauncher-container {
+  font-size: 4rem;
+
+  .background-entry {
+    border-radius: $border-radius;
+    box-shadow: 0 0 0 $border-width $border-color;
+  }
+  > overlay {
+    margin: 0.7rem;
+    entry {
+      outline: none;
+
+      image {
+        -gtk-icon-size: 1.5rem;
+      }
+
+      text {
+        font-size: 1.2rem;
+        placeholder {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+  scrolledwindow viewport box {
+    outline-width: $border-width;
+    margin: 0.2rem 0.7rem;
+  }
+
+  .app-button {
+    -gtk-icon-size: 2rem;
+    padding: 0.4rem 0.1rem;
+    background-color: color.adjust($foreground, $alpha: -0.95);
+    &:focus {
+      outline-color: $foreground;
+    }
+    &:hover {
+      background-color: color.adjust($foreground, $alpha: -0.7);
+    }
+    .description {
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+  }
+}

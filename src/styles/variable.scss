@@ -1,0 +1,16 @@
+@use "colors" as *;
+
+$window-margin: 8px 12px 18px 12px;
+$border-radius: 6px;
+$border-width: 2px;
+$border-color: $foreground;
+$window-box-shadow: 6px 6px 0 0 $foreground;
+
+// === BAR
+$bar-margin: 12px 18px 12px 12px;
+$bar-padding: 0 0.5rem;
+$bar-border_radius: 6px;
+$bar-border-width: 2px;
+$bar-border-color: $foreground;
+$bar-box-shadow: 6px 6px 0 0 $foreground; // 0 to disable
+// === BAR

@@ -1,0 +1,55 @@
+@use "sass:color";
+@use "../variable" as *;
+@use "../colors" as *;
+
+.bar-container {
+  margin: $bar-margin;
+  border-radius: $bar-border-radius;
+  padding: $bar-padding;
+  box-shadow:
+    0 0 0 $bar-border-width $bar-border-color,
+    $bar-box-shadow;
+
+  .network-speed {
+    .label {
+      font-size: 0.75rem;
+    }
+
+    .unit {
+      font-size: 0.6rem;
+    }
+  }
+
+  .workspace-container {
+    padding: 0 0.2rem;
+
+    .workspace-button {
+      background-color: transparent;
+      min-height: 0.5rem;
+      min-width: 0.5rem;
+      border: solid 0.15rem color.adjust($foreground, $alpha: -0.35);
+      border-radius: $bar-border-radius;
+
+      &:hover {
+        background-color: $foreground;
+        &.occupied {
+          background-color: $foreground;
+        }
+      }
+
+      &.active {
+        min-width: 2.5rem;
+        min-height: 0.8rem;
+        border-color: $foreground;
+      }
+
+      &.occupied {
+        border: solid 0.15rem transparent;
+        background-color: color.adjust($foreground, $alpha: -0.35);
+        &.active {
+          background-color: $foreground;
+        }
+      }
+    }
+  }
+}

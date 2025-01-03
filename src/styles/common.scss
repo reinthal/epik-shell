@@ -1,0 +1,81 @@
+@use "sass:color";
+@use "sass:math";
+@use "variable" as *;
+@use "colors" as *;
+
+* {
+  font-family: "Google Sans";
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+button {
+  padding: unset;
+  margin: unset;
+  border-radius: calc($border-radius/2);
+  background-color: transparent;
+
+  &:hover {
+    background-color: color.adjust($foreground, $alpha: -0.85);
+  }
+}
+
+window {
+  background-color: transparent;
+}
+
+separator {
+  margin: 0 0.5rem;
+}
+
+.bar .icon {
+  font-size: 1.1rem;
+}
+
+.divider {
+  background-color: $foreground;
+  margin: 0.5rem 0.3rem;
+  min-width: 0.1rem;
+  border-radius: 99px;
+  min-height: 1rem;
+}
+
+.panel-button {
+  background-color: transparent;
+  color: $foreground;
+  border-radius: calc($border-radius / 2);
+  padding: 0 0.3rem;
+  margin: 0.3rem 0;
+
+  &.applauncher {
+    label {
+      font-family: "JetBrainsMono Nerd Font Mono";
+      font-size: 1.45rem;
+    }
+  }
+
+  &:hover {
+    background-color: color.adjust($foreground, $alpha: -0.85);
+  }
+
+  &.active {
+    background-color: $foreground;
+    color: $background;
+  }
+}
+
+.window-content {
+  color: $foreground;
+  margin: $window-margin;
+  box-shadow:
+    0 0 0 $border-width $border-color,
+    $window-box-shadow;
+  border-radius: $border-radius;
+  background-color: $background;
+}
+
+.window-divider {
+  min-height: 0.1rem;
+  min-width: 4rem;
+  background-color: $foreground;
+}
