@@ -1,5 +1,5 @@
 import GObject, { register, GLib, property } from "astal/gobject";
-import { bash, notifySend, now, sh } from ".";
+import { bash, ensureDirectory, notifySend, now, sh } from ".";
 import { interval } from "astal";
 
 const HOME = GLib.get_home_dir();
@@ -34,7 +34,7 @@ export default class ScreenRecord extends GObject.Object {
   async start() {
     if (this._recording) return;
 
-    // Utils.ensureDirectory(this.#recordings);
+    ensureDirectory(this.#recordings);
     this.#file = `${this.#recordings}/${now()}.mp4`;
     sh(
       `wf-recorder -g "${await sh("slurp")}" -f ${this.#file} --pixel-format yuv420p`,
@@ -62,14 +62,18 @@ export default class ScreenRecord extends GObject.Object {
       icon: "folder-videos-symbolic",
       app_name: "Screen Recorder",
       summary: "Screen recording saved",
-      body: this.#file,
+      body: `The screen recording now available in ${this.#recordings}`,
+      actions: {
+        "Show in Files": () => sh(`xdg-open ${this.#recordings}`),
+        View: () => sh(`xdg-open ${this.#file}`),
+      },
     });
   }
 
   async screenshot(full = false) {
     const file = `${this.#screenshots}/${now()}.png`;
-    // Utils.ensureDirectory(this.#screenshots);
 
+    ensureDirectory(this.#screenshots);
     if (full) {
       await sh(`wayshot -f ${file}`);
     } else {
@@ -85,7 +89,7 @@ export default class ScreenRecord extends GObject.Object {
       image: file,
       app_name: "Screenshot",
       summary: "Screenshot saved",
-      body: file,
+      body: `Your screenshot is now available in ${this.#screenshots}`,
       actions: {
         "Show in Files": () => sh(`xdg-open ${this.#screenshots}`),
         View: () => sh(`xdg-open ${file}`),
