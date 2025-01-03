@@ -1,4 +1,16 @@
-import { execAsync, GLib, Variable } from "astal";
+import { execAsync, Gio, GLib, Variable } from "astal";
+
+export async function launchDefaultAsync(uri) {
+  return new Promise((resolve, reject) => {
+    Gio.AppInfo.launch_default_for_uri_async(uri, null, null, (_, res) => {
+      try {
+        resolve(Gio.AppInfo.launch_default_for_uri_finish(res));
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
 
 export const now = () =>
   GLib.DateTime.new_now_local().format("%Y-%m-%d_%H-%M-%S");
@@ -34,7 +46,7 @@ export function notifySend({ app_name, image, icon, summary, body, actions }) {
         actionsArray[parseInt(out)].callback();
       }
     })
-    .catch(print);
+    .catch(console.error);
 }
 
 export async function sh(cmd) {

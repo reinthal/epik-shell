@@ -40,9 +40,9 @@ try {
     `--define:COMPILED_CSS="${styleOut}"`,
   ]);
 } catch (error) {
-  print(error);
+  console.error(error);
   exit(0);
 }
 
 GLib.setenv("LD_PRELOAD", "", true);
-await import(`file://${outfile}`).catch(print);
+await import(`file://${outfile}`).catch(console.error);
