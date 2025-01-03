@@ -1,5 +1,10 @@
 import { execAsync, Gio, GLib, Variable } from "astal";
 
+export function ensureDirectory(path) {
+  if (!GLib.file_test(path, GLib.FileTest.EXISTS))
+    Gio.File.new_for_path(path).make_directory_with_parents(null);
+}
+
 export async function launchDefaultAsync(uri) {
   return new Promise((resolve, reject) => {
     Gio.AppInfo.launch_default_for_uri_async(uri, null, null, (_, res) => {
