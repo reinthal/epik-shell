@@ -1,6 +1,6 @@
 # Epik Shell
 
-shell based on [astal](https://github.com/Aylur/Astal/)
+shell based on [Astal](https://github.com/Aylur/Astal/)
 
 ## Note
 
