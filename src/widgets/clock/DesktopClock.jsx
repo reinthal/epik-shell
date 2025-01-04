@@ -34,7 +34,7 @@ function UnitBox({ label, shown1, shown2 }) {
 }
 
 export default function DesktopClock(_gdkmonitor) {
-  const { TOP, RIGHT } = Astal.WindowAnchor;
+  const { TOP, LEFT } = Astal.WindowAnchor;
 
   return (
     <window
@@ -42,7 +42,7 @@ export default function DesktopClock(_gdkmonitor) {
       layer={Astal.Layer.BOTTOM}
       name={"clock"}
       namespace={"clock"}
-      anchor={TOP | RIGHT}
+      anchor={TOP | LEFT}
       application={App}
       animation={"popin 80%"}
     >

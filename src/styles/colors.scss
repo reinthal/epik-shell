@@ -1,3 +1,9 @@
-$background: #f9f4e7;
-$foreground: #34332f;
+@use "sass:string";
+
+@function gtkalpha($c, $a) {
+  @return string.unquote("alpha(#{$c},#{$a})");
+}
+
+$background: #{"@view_bg_color"};
+$foreground: #{"@view_fg_color"};
 $dark-red: #cc241d;

@@ -1,0 +1,28 @@
+@use "../colors.scss" as *;
+@use "../variable.scss" as *;
+
+.audio-container {
+  padding: 0.7rem;
+  min-width: 300px;
+
+  .volume-box {
+    scale {
+      margin: 0;
+      padding: 0 0.6rem;
+      trough {
+        highlight {
+          background-color: $foreground;
+          color: $foreground;
+          min-height: 25px;
+          border-radius: 0;
+        }
+        slider {
+          box-shadow: none;
+          min-height: 25px;
+          min-width: 25px;
+          background-color: $foreground;
+        }
+      }
+    }
+  }
+}

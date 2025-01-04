@@ -27,8 +27,8 @@
       background-color: transparent;
       min-height: 0.5rem;
       min-width: 0.5rem;
-      border: solid 0.15rem color.adjust($foreground, $alpha: -0.35);
-      border-radius: $bar-border-radius;
+      border: solid 0.15rem gtkalpha($foreground, 0.65);
+      border-radius: calc($bar-border-radius * 1.5);
 
       &:hover {
         background-color: $foreground;
@@ -45,7 +45,7 @@
 
       &.occupied {
         border: solid 0.15rem transparent;
-        background-color: color.adjust($foreground, $alpha: -0.35);
+        background-color: gtkalpha($foreground, 0.65);
         &.active {
           background-color: $foreground;
         }

@@ -47,7 +47,7 @@ export function notifySend({ app_name, image, icon, summary, body, actions }) {
     ].join(" "),
   )
     .then((out) => {
-      if (!isNaN(out)) {
+      if (!isNaN(out) && out.trim() !== "") {
         actionsArray[parseInt(out)].callback();
       }
     })

@@ -6,7 +6,7 @@ const HOME = GLib.get_home_dir();
 
 @register({ GTypeName: "Screenrecord" })
 export default class ScreenRecord extends GObject.Object {
-  static instance = null;
+  static instance;
 
   static get_default() {
     if (!this.instance) this.instance = new ScreenRecord();
@@ -62,7 +62,7 @@ export default class ScreenRecord extends GObject.Object {
       icon: "folder-videos-symbolic",
       app_name: "Screen Recorder",
       summary: "Screen recording saved",
-      body: `The screen recording now available in ${this.#recordings}`,
+      body: `Available in ${this.#recordings}`,
       actions: {
         "Show in Files": () => sh(`xdg-open ${this.#recordings}`),
         View: () => sh(`xdg-open ${this.#file}`),
@@ -89,7 +89,7 @@ export default class ScreenRecord extends GObject.Object {
       image: file,
       app_name: "Screenshot",
       summary: "Screenshot saved",
-      body: `Your screenshot is now available in ${this.#screenshots}`,
+      body: `Available in ${this.#screenshots}`,
       actions: {
         "Show in Files": () => sh(`xdg-open ${this.#screenshots}`),
         View: () => sh(`xdg-open ${file}`),

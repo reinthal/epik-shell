@@ -1,0 +1,48 @@
+@use "../colors.scss" as *;
+@use "../variable.scss" as *;
+
+.verification-container {
+  min-width: 250px;
+  padding: 0.7rem;
+
+  .title {
+    font-size: 1.2rem;
+  }
+  .body {
+    font-weight: 400;
+  }
+
+  .buttons {
+    button {
+      background-color: gtkalpha($foreground, 0.1);
+      padding: 0.2rem;
+      &:focus {
+        outline-color: $foreground;
+      }
+      &:hover {
+        background-color: gtkalpha($foreground, 0.35);
+      }
+    }
+
+    button:last-child {
+      color: $dark-red;
+    }
+  }
+}
+
+.powermenu-container {
+  padding: 0.7rem;
+
+  .system-button {
+    background-color: gtkalpha($foreground, 0.1);
+    padding: 0.7rem;
+    border-radius: $border-radius;
+
+    &:focus {
+      outline-color: $foreground;
+    }
+    &:hover {
+      background-color: gtkalpha($foreground, 0.35);
+    }
+  }
+}

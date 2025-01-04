@@ -8,6 +8,10 @@ import NetworkSpeedPanelButton from "./NetworkSpeedPanelButton";
 import RecordIndicatorPanelButton from "./RecordIndicatorPanelButton";
 import ScreenRecord from "../../utils/screen-record";
 import LauncherPanelButton from "./LauncherPanelButton";
+import NotifPanelButton from "./NotifPanelButton";
+import QSPanelButton from "./QSPanelButton";
+import AudioPanelButton from "./AudioPanelButton";
+import NetworkPanelButton from "./NetworkPanelButton";
 
 function Start() {
   return (
@@ -24,7 +28,7 @@ function Center() {
     <box>
       <TimePanelButton />
       <Divider />
-      <BatteryPanelButton />
+      <NotifPanelButton />
     </box>
   );
 }
@@ -37,6 +41,14 @@ function End() {
       <RecordIndicatorPanelButton />
       <Divider visible={bind(screenRecord, "recording")} />
       <NetworkSpeedPanelButton />
+      <Divider />
+      <NetworkPanelButton />
+      <Divider />
+      <BatteryPanelButton />
+      <Divider />
+      <AudioPanelButton />
+      <Divider />
+      <QSPanelButton />
     </box>
   );
 }

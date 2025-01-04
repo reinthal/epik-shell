@@ -2,39 +2,29 @@ import { Gtk } from "astal/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import { range } from "../../utils";
 import { bind } from "astal";
-
-const hyprland = AstalHyprland.get_default();
+import { Variable } from "astal";
 
 function WorkspaceButton({ ws, ...props }) {
+  const hyprland = AstalHyprland.get_default();
+  const classNames = Variable.derive(
+    [bind(hyprland, "focused-workspace"), bind(hyprland, "clients")],
+    (fws, _) => {
+      const classes = ["workspace-button"];
+
+      const active = fws.id == ws.id;
+      active && classes.push("active");
+
+      const occupied = hyprland.get_workspace(ws.id)?.get_clients().length > 0;
+      occupied && classes.push("occupied");
+      return classes;
+    },
+  );
   return (
     <button
-      cssClasses={bind(hyprland, "focused-workspace").as((fws) => {
-        let classes = ["workspace-button"];
-        const active = fws.id === ws.id;
-        if (active) {
-          classes.push("active");
-        }
-
-        const occupied =
-          hyprland.get_workspace(ws.id)?.get_clients().length > 0;
-        if (occupied) {
-          classes.push("occupied");
-        }
-
-        return classes;
-      })}
+      cssClasses={classNames()}
       valign={Gtk.Align.CENTER}
       halign={Gtk.Align.CENTER}
       onClicked={() => ws.focus()}
-      setup={(self) => {
-        hyprland.connect("notify::clients", () => {
-          if (hyprland.get_workspace(ws.id)?.get_clients().length > 0) {
-            self.add_css_class("occupied");
-          } else {
-            self.remove_css_class("occupied");
-          }
-        });
-      }}
       {...props}
     />
   );

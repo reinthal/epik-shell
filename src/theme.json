@@ -1,0 +1,12 @@
+{
+  "default": {
+    "background": "#f9f4e7",
+    "foreground": "#34332f",
+    "red": "#cc241d"
+  },
+  "dark": {
+    "background": "#34332f",
+    "foreground": "#f9f4e7",
+    "red": "#cc241d"
+  }
+}

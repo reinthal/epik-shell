@@ -1,0 +1,83 @@
+@use "../variable" as *;
+@use "../colors" as *;
+
+.qs-container {
+  min-width: 300px;
+  padding: 0.7rem;
+
+  separator {
+    margin: 0.7rem 0;
+    margin-top: 0.2rem;
+  }
+
+  .header {
+    label {
+      font-size: 1.2rem;
+    }
+    button {
+      padding: 0.3rem 0.5rem;
+      border-radius: $border-radius;
+      background-color: gtkalpha($foreground, 0.1);
+
+      &:hover {
+        color: $dark-red;
+        background-color: gtkalpha($foreground, 0.35);
+      }
+      image {
+        -gtk-icon-size: 24px;
+      }
+    }
+  }
+
+  .brightness-box {
+    margin-top: 0.7rem;
+    scale {
+      margin: 0;
+      padding: 0 0.6rem;
+      trough {
+        highlight {
+          background-color: $foreground;
+          color: $foreground;
+          min-height: 25px;
+          border-radius: 0;
+        }
+        slider {
+          box-shadow: none;
+          min-height: 25px;
+          min-width: 25px;
+          background-color: $foreground;
+        }
+      }
+    }
+  }
+
+  .qs-button {
+    padding: 0.5rem 0;
+    border-radius: $border-radius;
+    background-color: gtkalpha($foreground, 0.1);
+
+    button {
+      background-color: transparent;
+    }
+
+    popover contents {
+      border-radius: $border-radius;
+    }
+
+    &:hover {
+      background-color: gtkalpha($foreground, 0.35);
+    }
+    > * {
+      padding: 0.5rem;
+    }
+
+    .status {
+      font-weight: 400;
+    }
+
+    &.active {
+      color: $background;
+      background-color: $foreground;
+    }
+  }
+}

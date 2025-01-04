@@ -1,6 +1,6 @@
-import { App, Astal, Gdk } from "astal/gtk4";
+import { App, Astal, Gdk, Gtk } from "astal/gtk4";
 
-function Padding({ winName, vertical, horizontal }) {
+function Padding({ winName }) {
   return (
     <box
       onButtonReleased={(_, event) => {
@@ -8,8 +8,8 @@ function Padding({ winName, vertical, horizontal }) {
           App.toggle_window(winName);
         }
       }}
-      vexpand={vertical ?? false}
-      hexpand={horizontal ?? false}
+      vexpand
+      hexpand
     />
   );
 }
@@ -19,35 +19,36 @@ function Layout({ child, name, position }) {
     case "top_center":
       return (
         <box>
-          <Padding winName={name} horizontal />
-          <box vertical>
+          <Padding winName={name} />
+          <box vertical hexpand={false}>
             {child}
-            <Padding winName={name} vertical />
+            <Padding winName={name} />
           </box>
-          <Padding winName={name} horizontal />
+          <Padding winName={name} />
         </box>
       );
     case "top_right":
       return (
         <box>
-          <Padding winName={name} horizontal />
-          <box vertical>
+          <Padding winName={name} />
+          <box vertical hexpand={false}>
             {child}
-            <Padding winName={name} vertical />
+            <Padding winName={name} />
           </box>
         </box>
       );
+    //default to center
     default:
       return (
-        <box>
-          <Padding winName={name} horizontal vertical />
-          <box vertical>
-            <Padding winName={name} vertical />
+        <centerbox>
+          <Padding winName={name} />
+          <centerbox orientation={Gtk.Orientation.VERTICAL}>
+            <Padding winName={name} />
             {child}
-            <Padding winName={name} vertical />
-          </box>
-          <Padding winName={name} horizontal vertical />
-        </box>
+            <Padding winName={name} />
+          </centerbox>
+          <Padding winName={name} />
+        </centerbox>
       );
   }
 }

@@ -23,8 +23,9 @@ export const dockVisible = Variable(updateVisibility())
 
 // transparent window to detect hover
 export function DockHover(_gdkmonitor) {
+  const getSize = (win) => win.get_child().get_preferred_size()[0];
   const dock = App.get_window("dock");
-  const size = dock.get_child().get_preferred_size()[0];
+  const size = getSize(dock);
   const width = size.width;
   const height = parseInt(
     exec("hyprctl getoption general:gaps_out")
@@ -39,10 +40,19 @@ export function DockHover(_gdkmonitor) {
 		color: transparent;
 	}`);
 
+  App.connect("window-toggled", (_, win) => {
+    if (win.name == "dock") {
+      const size = getSize(win);
+      App.apply_css(`.dock-padding {
+		min-width: ${size.width}px;
+		min-height: ${height}px;
+		color: transparent;
+	}`);
+    }
+  });
+
   return (
     <window
-      widthRequest={width}
-      heightRequest={height}
       visible={dockVisible((v) => !v)}
       name={"dock-hover"}
       setup={(self) => {
@@ -89,7 +99,11 @@ export default function Dock(_gdkmonitor) {
       }}
       application={App}
     >
-      <DockApps />
+      <box>
+        <box hexpand />
+        <DockApps />
+        <box hexpand />
+      </box>
     </window>
   );
 }

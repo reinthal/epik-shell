@@ -19,3 +19,18 @@ export function windowAnimation() {
       .map((win) => `layerrule animation ${win.animation}, ${win.namespace}`),
   );
 }
+
+export function windowBlur() {
+  const noIgnorealpha = ["verification", "powermenu"];
+
+  sendBatch(
+    App.get_windows().flatMap(({ name }) => {
+      return [
+        `layerrule blur, ${name}`,
+        noIgnorealpha.some((skip) => name?.includes(skip))
+          ? ""
+          : `layerrule ignorealpha 0.3, ${name}`,
+      ];
+    }),
+  );
+}

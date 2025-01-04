@@ -9,6 +9,19 @@
   font-weight: 600;
 }
 
+menubutton {
+  padding: 0;
+  button {
+    padding: unset;
+    margin: unset;
+    border-radius: calc($border-radius/2);
+
+    &:hover {
+      background-color: gtkalpha($foreground, 0.15);
+    }
+  }
+}
+
 button {
   padding: unset;
   margin: unset;
@@ -16,7 +29,7 @@ button {
   background-color: transparent;
 
   &:hover {
-    background-color: color.adjust($foreground, $alpha: -0.85);
+    background-color: gtkalpha($foreground, 0.15);
   }
 }
 
@@ -44,8 +57,15 @@ separator {
   background-color: transparent;
   color: $foreground;
   border-radius: calc($border-radius / 2);
-  padding: 0 0.3rem;
+  padding: 0 0.5rem;
   margin: 0.3rem 0;
+
+  &.notifications {
+    color: $foreground;
+    .circle {
+      border-radius: 99px;
+    }
+  }
 
   &.applauncher {
     label {
@@ -55,7 +75,7 @@ separator {
   }
 
   &:hover {
-    background-color: color.adjust($foreground, $alpha: -0.85);
+    background-color: gtkalpha($foreground, 0.15);
   }
 
   &.active {

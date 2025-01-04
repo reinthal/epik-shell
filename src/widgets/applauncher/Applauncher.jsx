@@ -60,39 +60,34 @@ function SearchEntry() {
 
   App.apply_css(`.background-entry {
 		min-height: 100px;
-		min-width: 450px;
     background-image: url("file://${imagePath}");
     background-size: cover;
     background-position: center;
 	}`);
 
   return (
-    <overlay
-      setup={(self) => {
-        self.add_overlay(
-          <entry
-            primaryIconName={"system-search-symbolic"}
-            placeholderText="Search..."
-            text={text.get()}
-            setup={(self) => {
-              App.connect("window-toggled", (_, win) => {
-                const winName = win.name;
-                const visible = win.visible;
-
-                if (winName == WINDOW_NAME && visible) {
-                  text.set("");
-                  self.set_text("");
-                  self.grab_focus();
-                }
-              });
-            }}
-            onChanged={(self) => text.set(self.text)}
-            onActivate={onEnter}
-          />,
-        );
-      }}
-    >
+    <overlay>
       <box cssClasses={["background-entry"]}></box>
+      <entry
+        type="overlay"
+        primaryIconName={"system-search-symbolic"}
+        placeholderText="Search..."
+        text={text.get()}
+        setup={(self) => {
+          App.connect("window-toggled", (_, win) => {
+            const winName = win.name;
+            const visible = win.visible;
+
+            if (winName == WINDOW_NAME && visible) {
+              text.set("");
+              self.set_text("");
+              self.grab_focus();
+            }
+          });
+        }}
+        onChanged={(self) => text.set(self.text)}
+        onActivate={onEnter}
+      />
     </overlay>
   );
 }
@@ -101,17 +96,21 @@ function AppsScrolledWindow() {
   const list = text((text) => apps.fuzzy_query(text));
 
   return (
-    <Gtk.ScrolledWindow minContentHeight={300}>
+    <Gtk.ScrolledWindow vexpand>
       <box spacing={6} vertical>
-        {list.as((list) => list.map((app) => <AppButton app={app} />))}{" "}
+        {list.as((list) => list.map((app) => <AppButton app={app} />))}
         <box
           halign={Gtk.Align.CENTER}
           valign={Gtk.Align.CENTER}
           cssClasses={["not-found"]}
           vertical
+          vexpand
           visible={list.as((l) => l.length === 0)}
         >
-          <image iconName="system-search-symbolic" />
+          <image
+            iconName="system-search-symbolic"
+            iconSize={Gtk.IconSize.LARGE}
+          />
           <label label="No match found" />
         </box>
       </box>
@@ -122,7 +121,11 @@ function AppsScrolledWindow() {
 export default function Applauncher(_gdkmonitor) {
   return (
     <PopupWindow name={WINDOW_NAME}>
-      <box cssClasses={["window-content", "applauncher-container"]} vertical>
+      <box
+        cssClasses={["window-content", "applauncher-container"]}
+        vertical
+        vexpand={false}
+      >
         <SearchEntry />
         <AppsScrolledWindow />
       </box>

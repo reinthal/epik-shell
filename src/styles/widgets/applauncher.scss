@@ -4,6 +4,8 @@
 
 .applauncher-container {
   font-size: 4rem;
+  min-height: 400px;
+  min-width: 450px;
 
   .background-entry {
     border-radius: $border-radius;
@@ -26,20 +28,27 @@
       }
     }
   }
-  scrolledwindow viewport box {
-    outline-width: $border-width;
-    margin: 0.2rem 0.7rem;
+  scrolledwindow viewport {
+    padding-bottom: 0.5rem;
+    box {
+      outline-width: $border-width;
+      margin: 0.2rem 0.7rem;
+
+      .not-found label {
+        font-size: 1rem;
+      }
+    }
   }
 
   .app-button {
     -gtk-icon-size: 2rem;
     padding: 0.4rem 0.1rem;
-    background-color: color.adjust($foreground, $alpha: -0.95);
+    background-color: gtkalpha($foreground, 0.1);
     &:focus {
       outline-color: $foreground;
     }
     &:hover {
-      background-color: color.adjust($foreground, $alpha: -0.7);
+      background-color: gtkalpha($foreground, 0.3);
     }
     .description {
       font-size: 0.85rem;

@@ -2,6 +2,8 @@ import { bind } from "astal";
 import { Gtk } from "astal/gtk4";
 import AstalApps from "gi://AstalApps?version=0.1";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import AstalMpris from "gi://AstalMpris?version=0.1";
+import Pango from "gi://Pango?version=1.0";
 
 const hyprland = AstalHyprland.get_default();
 const application = new AstalApps.Apps();
@@ -10,6 +12,7 @@ function AppButton({ app, onClicked, term, pinned = false, client }) {
   const substitute = {
     Alacritty: "terminal",
     localsend: "send-to",
+    "spotify-client": "org.gnome.Lollypop-spotify-symbolic",
   };
 
   const iconName = substitute[app.iconName] ?? app.iconName;
@@ -18,7 +21,7 @@ function AppButton({ app, onClicked, term, pinned = false, client }) {
     <overlay
       cssClasses={bind(hyprland, "focused-client").as((fcsClient) => {
         const classes = [];
-        if (term == "" || !fcsClient) return [];
+        if (term == "" || fcsClient == null) return [];
 
         if (!pinned) {
           if (client.address === fcsClient.address) {
@@ -33,23 +36,6 @@ function AppButton({ app, onClicked, term, pinned = false, client }) {
 
         return classes;
       })}
-      setup={(self) => {
-        self.add_overlay(
-          <box
-            cssClasses={["indicator"]}
-            valign={Gtk.Align.END}
-            halign={Gtk.Align.CENTER}
-            visible={
-              pinned &&
-              bind(hyprland, "clients").as((clients) => {
-                return clients
-                  .map((e) => e.class.toLowerCase())
-                  .includes(term.toLowerCase());
-              })
-            }
-          />,
-        );
-      }}
     >
       <button onClicked={onClicked} cssClasses={["app-button"]}>
         <image
@@ -57,6 +43,20 @@ function AppButton({ app, onClicked, term, pinned = false, client }) {
           iconSize={Gtk.IconSize.LARGE}
         />
       </button>
+      <box
+        type="overlay"
+        cssClasses={["indicator"]}
+        valign={Gtk.Align.END}
+        halign={Gtk.Align.CENTER}
+        visible={
+          pinned &&
+          bind(hyprland, "clients").as((clients) => {
+            return clients
+              .map((e) => e.class.toLowerCase())
+              .includes(term.toLowerCase());
+          })
+        }
+      />
     </overlay>
   );
 }
@@ -128,10 +128,65 @@ function AppsList() {
   );
 }
 
-export default function DockApps() {
+function MediaPlayer({ player }) {
+  if (!player) {
+    return <box />;
+  }
+  const title = bind(player, "title").as((t) => t || "Unknown Track");
+  const artist = bind(player, "artist").as((a) => a || "Unknown Artist");
+  const coverArt = bind(player, "coverArt");
+
+  const playIcon = bind(player, "playbackStatus").as((s) =>
+    s === AstalMpris.PlaybackStatus.PLAYING
+      ? "media-playback-pause-symbolic"
+      : "media-playback-start-symbolic",
+  );
+
   return (
-    <box cssClasses={["window-content", "dock-container"]}>
+    <box cssClasses={["media-player"]} hexpand>
+      <image
+        overflow={Gtk.Overflow.HIDDEN}
+        pixelSize={35}
+        cssClasses={["cover"]}
+        file={coverArt}
+      />
+      <box vertical hexpand>
+        <label
+          ellipsize={Pango.EllipsizeMode.END}
+          halign={Gtk.Align.START}
+          label={title}
+          maxWidthChars={15}
+        />
+        <label halign={Gtk.Align.START} label={artist} />
+      </box>
+      <button
+        halign={Gtk.Align.END}
+        valign={Gtk.Align.CENTER}
+        onClicked={() => player.play_pause()}
+        visible={bind(player, "canControl")}
+      >
+        <image iconName={playIcon} pixelSize={18} />
+      </button>
+      <button
+        halign={Gtk.Align.END}
+        valign={Gtk.Align.CENTER}
+        onClicked={() => player.next()}
+        visible={bind(player, "canGoNext")}
+      >
+        <image iconName="media-skip-forward-symbolic" pixelSize={24} />
+      </button>
+    </box>
+  );
+}
+
+export default function DockApps() {
+  const mpris = AstalMpris.get_default();
+  return (
+    <box cssClasses={["window-content", "dock-container"]} hexpand={false}>
       <AppsList />
+      {bind(mpris, "players").as((players) => (
+        <MediaPlayer player={players[0]} />
+      ))}
       <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <AppButton
         app={{ iconName: "trash-shot" }}

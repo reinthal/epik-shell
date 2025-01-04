@@ -27,7 +27,7 @@ const urgency = (n) => {
   }
 };
 
-export default function Notification({ n }) {
+export default function Notification({ n, showActions = true }) {
   return (
     <box
       name={n.id.toString()}
@@ -74,7 +74,7 @@ export default function Notification({ n }) {
               />
             </box>
           )}
-          <box vertical>
+          <box hexpand vertical>
             <label
               ellipsize={Pango.EllipsizeMode.END}
               maxWidthChars={30}
@@ -85,21 +85,19 @@ export default function Notification({ n }) {
             />
             {n.body && (
               <label
-                ellipsize={Pango.EllipsizeMode.END}
-                maxWidthChars={30}
                 cssClasses={["body"]}
+                maxWidthChars={30}
                 wrap
                 useMarkup
                 halign={Gtk.Align.START}
                 xalign={0}
-                justify={Gtk.Justification.FILL}
                 label={n.body}
               />
             )}
           </box>
         </box>
-        {n.get_actions().length > 0 && (
-          <box cssClasses={["actions"]}>
+        {showActions && n.get_actions().length > 0 && (
+          <box cssClasses={["actions"]} spacing={6}>
             {n.get_actions().map(({ label, id }) => (
               <button hexpand onClicked={() => n.invoke(id)}>
                 <label label={label} halign={Gtk.Align.CENTER} hexpand />
