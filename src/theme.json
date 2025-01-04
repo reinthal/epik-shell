@@ -1,12 +1,12 @@
 {
   "default": {
-    "background": "#f9f4e7",
-    "foreground": "#34332f",
+    "background": "#fbf1c7",
+    "foreground": "#3c3836",
     "red": "#cc241d"
   },
   "dark": {
-    "background": "#34332f",
-    "foreground": "#f9f4e7",
+    "background": "#282828",
+    "foreground": "#ebdbb2",
     "red": "#cc241d"
   }
 }
