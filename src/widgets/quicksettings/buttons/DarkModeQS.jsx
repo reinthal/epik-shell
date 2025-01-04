@@ -4,15 +4,11 @@ import QSButton from "../QSButton";
 export default function DarkModeQS({ ...props }) {
   return (
     <QSButton
-      setup={(self) => {
-        themeMode.subscribe((val) => {
-          if (!val) {
-            self.add_css_class("active");
-          } else {
-            self.remove_css_class("active");
-          }
-        });
-      }}
+      cssClasses={themeMode().as((t) => {
+        const classes = ["qs-button"];
+        !t && classes.push("active");
+        return classes;
+      })}
       iconName={"dark-mode-symbolic"}
       label={"Dark Mode"}
       status={themeMode((t) => (t ? "Off" : "On"))}
