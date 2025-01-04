@@ -2,8 +2,8 @@ import { App } from "astal/gtk4";
 import ScreenRecord from "../../../utils/screen-record";
 import QSButton from "../QSButton";
 import { WINDOW_NAME } from "../QSWindow";
-import { timeout } from "../../../../../../../usr/share/astal/gjs";
 import { bind } from "astal";
+import { timeout } from "astal";
 
 export default function RecordQS() {
   const screenRecord = ScreenRecord.get_default();
