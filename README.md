@@ -22,7 +22,7 @@ A shell based on [Astal](https://github.com/Aylur/Astal/).
 
 ### Required
 
-- `astal` (including `libastal-meta` & `libastal-gjs`)  
+- `astal` (`libastal-meta` & `libastal-gjs`)  
 - `dart-sass`  
 
 ### Optional
