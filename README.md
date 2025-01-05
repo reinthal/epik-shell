@@ -22,7 +22,7 @@ A shell based on [Astal](https://github.com/Aylur/Astal/).
 
 ### Required
 
-- `astal` (`libastal-meta` & `libastal-gjs`)
+- `astal` (`libastal-meta` & `libastal-gjs`) or `aylurs-gtk-shell`
 - `dart-sass`
 - `esbuild`
 
@@ -50,6 +50,14 @@ A shell based on [Astal](https://github.com/Aylur/Astal/).
 3. Run
    ```bash
    LD_PRELOAD=/usr/lib/libgtk4-layer-shell.so gjs -m build.js
+   ```
+   You can also use ags:
+   ```bash
+   ags run --gtk4 ./src
+   ```
+   or:
+   ```bash
+   ags run --gtk4 -d <FULL-PATH-TO-SRC-FOLDER>
    ```
 
 ---

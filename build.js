@@ -16,7 +16,7 @@ async function execAsync(cmd) {
 
 const currentDir = GLib.path_get_dirname(programPath);
 
-const entry = `${currentDir}/src/app.js`;
+const entry = `${currentDir}/src/epik.js`;
 const outfile = `${currentDir}/app.js`;
 
 const styleEntry = `${currentDir}/src/styles.scss`;
@@ -44,5 +44,4 @@ try {
   exit(0);
 }
 
-GLib.setenv("LD_PRELOAD", "", true);
 await import(`file://${outfile}`).catch(console.error);

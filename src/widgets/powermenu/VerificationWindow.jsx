@@ -15,7 +15,10 @@ export default function VerificationWindow(_gdkmonitor) {
         vertical
         spacing={6}
       >
-        <label label={bind(powermenu, "title")} cssClasses={["title"]} />
+        <label
+          label={bind(powermenu, "title").as(String)}
+          cssClasses={["title"]}
+        />
         <label label={"Are you sure?"} cssClasses={["body"]} />
         <box cssClasses={["buttons"]} homogeneous spacing={6}>
           <button

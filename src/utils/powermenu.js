@@ -8,7 +8,25 @@ const options = {
   shutdown: "shutdown now",
 };
 
-@register({ GTypeName: "Powermenu" })
+@register({
+  GTypeName: "Powermenu",
+  Properties: {
+    title: GObject.ParamSpec.string(
+      "title",
+      "Title",
+      "Read write",
+      GObject.ParamFlags.READWRITE,
+      "",
+    ),
+    cmd: GObject.ParamSpec.string(
+      "cmd",
+      "cmd",
+      "Read write",
+      GObject.ParamFlags.READWRITE,
+      "",
+    ),
+  },
+})
 export default class Powermenu extends GObject.Object {
   static instance;
 
@@ -17,21 +35,16 @@ export default class Powermenu extends GObject.Object {
     return this.instance;
   }
 
-  #title = "";
-  #cmd = "";
-
-  @property(String)
   get title() {
-    return this.#title;
+    return this._title;
   }
 
-  @property(String)
   get cmd() {
-    return this.#cmd;
+    return this._cmd;
   }
 
   action(action) {
-    [this.#cmd, this.#title] = {
+    [this._cmd, this._title] = {
       sleep: [options.sleep, "Sleep"],
       reboot: [options.reboot, "Reboot"],
       logout: [options.logout, "Log Out"],

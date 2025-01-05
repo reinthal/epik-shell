@@ -6,7 +6,29 @@ const get = (args) => Number(exec(`brightnessctl ${args}`));
 const screen = exec(`bash -c "ls -w1 /sys/class/backlight | head -1"`);
 const kbd = exec(`bash -c "ls -w1 /sys/class/leds | head -1"`);
 
-@register({ GTypeName: "Brightness" })
+@register({
+  GTypeName: "Brightness",
+  Properties: {
+    screen: GObject.ParamSpec.int(
+      "screen",
+      "Screen brightness value",
+      "Read and write number property",
+      GObject.ParamFlags.READWRITE,
+      0,
+      1,
+      get("get") / (get("max") || 1),
+    ),
+    kbd: GObject.ParamSpec.int(
+      "kbd",
+      "Kbd brightness value",
+      "Read and write number property",
+      GObject.ParamFlags.READWRITE,
+      0,
+      get(`--device ${kbd} max`),
+      get(`--device ${kbd} get`),
+    ),
+  },
+})
 export default class Brightness extends GObject.Object {
   static instance;
 
@@ -17,27 +39,25 @@ export default class Brightness extends GObject.Object {
   }
 
   #kbdMax = get(`--device ${kbd} max`);
-  #kbd = get(`--device ${kbd} get`);
+  //_kbd = get(`--device ${kbd} get`);
   #screenMax = get("max");
-  #screen = get("get") / (get("max") || 1);
+  //_screen = get("get") / (get("max") || 1);
 
-  @property(Number)
   get kbd() {
-    return this.#kbd;
+    return this._kbd;
   }
 
   set kbd(value) {
     if (value < 0 || value > this.#kbdMax) return;
 
     execAsync(`brightnessctl -d ${kbd} s ${value} -q`).then(() => {
-      this.#kbd = value;
+      this._kbd = value;
       this.notify("kbd");
     });
   }
 
-  @property(Number)
   get screen() {
-    return this.#screen;
+    return this._screen;
   }
 
   set screen(percent) {
@@ -46,7 +66,7 @@ export default class Brightness extends GObject.Object {
     if (percent > 1) percent = 1;
 
     execAsync(`brightnessctl set ${Math.floor(percent * 100)}% -q`).then(() => {
-      this.#screen = percent;
+      this._screen = percent;
       this.notify("screen");
     });
   }
@@ -59,13 +79,13 @@ export default class Brightness extends GObject.Object {
 
     monitorFile(screenPath, async (f) => {
       const v = await readFileAsync(f);
-      this.#screen = Number(v) / this.#screenMax;
+      this._screen = Number(v) / this.#screenMax;
       this.notify("screen");
     });
 
     monitorFile(kbdPath, async (f) => {
       const v = await readFileAsync(f);
-      this.#kbd = Number(v) / this.#kbdMax;
+      this._kbd = Number(v) / this.#kbdMax;
       this.notify("kbd");
     });
   }
