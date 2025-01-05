@@ -14,7 +14,7 @@ export const WINDOW_NAME = "quicksettings";
 
 function QSButtons() {
   return (
-    <box vertical spacing={6}>
+    <box vertical spacing={6} homogeneous>
       <box homogeneous spacing={6}>
         <DarkModeQS />
         <ColorPickerQS />

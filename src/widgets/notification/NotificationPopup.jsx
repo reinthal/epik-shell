@@ -33,7 +33,12 @@ export default function NotificationPopup(gdkmonitor) {
           isProcessing = true;
           const id = notificationQueue.shift();
 
-          self.set_child(Notification({ n: notifd.get_notification(id) }));
+          self.set_child(
+            <box vertical>
+              {Notification({ n: notifd.get_notification(id) })}
+              <box vexpand />
+            </box>,
+          );
           self.visible = true;
 
           timeout(5000, () => {

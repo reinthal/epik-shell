@@ -32,6 +32,8 @@ export default function Notification({ n, showActions = true }) {
     <box
       name={n.id.toString()}
       cssClasses={["window-content", "notification-container", urgency(n)]}
+      hexpand={false}
+      vexpand={false}
     >
       <box vertical>
         <box cssClasses={["header"]}>
@@ -88,7 +90,6 @@ export default function Notification({ n, showActions = true }) {
                 cssClasses={["body"]}
                 maxWidthChars={30}
                 wrap
-                useMarkup
                 halign={Gtk.Align.START}
                 xalign={0}
                 label={n.body}

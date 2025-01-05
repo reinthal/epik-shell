@@ -1,13 +1,6 @@
 import { Gtk } from "astal/gtk4";
 
-export function QSMenuButton({
-  child,
-  iconName,
-  label,
-  setup,
-  status,
-  cssClasses,
-}) {
+export function QSMenuButton({ child, iconName, label, setup, cssClasses }) {
   return (
     <menubutton
       setup={setup}
@@ -23,7 +16,6 @@ export default function QSButton({
   iconName,
   label,
   setup,
-  status,
   onClicked,
   cssClasses,
 }) {

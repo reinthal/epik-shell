@@ -61,15 +61,12 @@
 
 .notification-container {
   padding: 0.7rem;
+  min-width: 330px;
 
   &.critical {
     box-shadow:
       0 0 0 0.1rem $dark-red,
       0.5rem 0.5rem 0 0 $dark-red;
-  }
-
-  > box {
-    min-width: 330px;
   }
 
   .header {
