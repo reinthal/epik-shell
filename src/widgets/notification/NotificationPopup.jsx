@@ -15,7 +15,12 @@ export default function NotificationPopup(gdkmonitor) {
         let isProcessing = false;
 
         notifd.connect("notified", (_, id) => {
-          if (notifd.dont_disturb) return;
+          if (
+            notifd.dont_disturb &&
+            notifd.get_notification(id).urgency != AstalNotifd.Urgency.CRITICAL
+          ) {
+            return;
+          }
           notificationQueue.push(id);
           processQueue();
         });

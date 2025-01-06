@@ -3,12 +3,39 @@ import PopupWindow from "../common/PopupWindow";
 import AstalBattery from "gi://AstalBattery?version=0.1";
 import { bind } from "astal";
 import { Gtk } from "astal/gtk4";
+import { notifySend } from "../../utils";
 
 export const WINDOW_NAME = "battery";
 
 export default function BatteryWindow(_gdkmonitor) {
   const powerprofiles = AstalPowerProfiles.get_default();
   const battery = AstalBattery.get_default();
+
+  //Maybe I shouldn't write it here
+  battery.connect("notify::warning-level", () => {
+    switch (battery.warningLevel) {
+      case AstalBattery.WarningLevel.LOW:
+        notifySend({
+          app_name: "Battery",
+          urgency: "critical",
+          app_icon: "battery-symbolic",
+          icon: "battery-caution-symbolic",
+          summary: "Power Running Low",
+          body: "Your battery is running low on power",
+        });
+        break;
+      case AstalBattery.WarningLevel.CRITICIAL:
+        notifySend({
+          app_name: "Battery",
+          app_icon: "battery-symbolic",
+          urgency: "critical",
+          icon: "battery-caution-symbolic",
+          summary: "Critial Power Warning",
+          body: "Battery is almost empty. Your device may shut down soon",
+        });
+        break;
+    }
+  });
   return (
     <PopupWindow name={WINDOW_NAME} animation="slide top" layout={"top_right"}>
       <box

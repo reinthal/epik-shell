@@ -28,7 +28,16 @@ export function range(max) {
   return Array.from({ length: max + 1 }, (_, i) => i);
 }
 
-export function notifySend({ app_name, image, icon, summary, body, actions }) {
+export function notifySend({
+  app_name,
+  app_icon,
+  urgency = "normal",
+  image,
+  icon,
+  summary,
+  body,
+  actions,
+}) {
   const actionsArray = Object.entries(actions || {}).map(
     ([label, callback], i) => ({
       id: `${i}`,
@@ -39,6 +48,8 @@ export function notifySend({ app_name, image, icon, summary, body, actions }) {
   execAsync(
     [
       "notify-send",
+      `-u ${urgency}`,
+      app_icon && `-i ${app_icon}`,
       `-h "string:image-path:${!!icon ? icon : image}"`,
       `"${summary ?? ""}"`,
       `"${body ?? ""}"`,
