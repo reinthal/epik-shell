@@ -14,11 +14,15 @@ import AudioPanelButton from "./AudioPanelButton";
 import NetworkPanelButton from "./NetworkPanelButton";
 
 function Start() {
+  const screenRecord = ScreenRecord.get_default();
+
   return (
     <box halign={Gtk.Align.START}>
       <LauncherPanelButton />
       <Divider />
       <WorkspacesPanelButton />
+      <Divider visible={bind(screenRecord, "recording")} />
+      <RecordIndicatorPanelButton />
     </box>
   );
 }
@@ -34,12 +38,8 @@ function Center() {
 }
 
 function End() {
-  const screenRecord = ScreenRecord.get_default();
-
   return (
     <box halign={Gtk.Align.END}>
-      <RecordIndicatorPanelButton />
-      <Divider visible={bind(screenRecord, "recording")} />
       <NetworkSpeedPanelButton />
       <Divider />
       <NetworkPanelButton />
