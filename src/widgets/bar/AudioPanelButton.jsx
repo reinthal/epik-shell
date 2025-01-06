@@ -4,7 +4,7 @@ import { bind } from "astal";
 import { WINDOW_NAME } from "../audio/AudioWindow";
 import { App } from "astal/gtk4";
 
-export default function AudioPanelButton() {
+export default function AudioPanelButton({ showLabel = false }) {
   const audio = AstalWp.get_default()?.audio.default_speaker;
   return (
     <PanelButton
@@ -13,9 +13,11 @@ export default function AudioPanelButton() {
     >
       <box spacing={4}>
         <image iconName={bind(audio, "volume-icon")} />
-        <label
-          label={bind(audio, "volume").as((p) => `${Math.floor(p * 100)}%`)}
-        />
+        {showLabel && (
+          <label
+            label={bind(audio, "volume").as((p) => `${Math.floor(p * 100)}%`)}
+          />
+        )}
       </box>
     </PanelButton>
   );

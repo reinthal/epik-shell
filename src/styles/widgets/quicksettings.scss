@@ -52,16 +52,28 @@
   }
 
   .qs-button {
-    padding: 0.5rem 0;
     border-radius: $border-radius;
     background-color: gtkalpha($foreground, 0.1);
+    outline-color: $foreground;
 
     button {
+      padding: 1rem 0;
       background-color: transparent;
+      outline-color: $foreground;
     }
 
     popover contents {
       border-radius: $border-radius;
+      padding: 0.5rem;
+      modelbutton {
+        background-color: gtkalpha($foreground, 0.1);
+        &:first-child {
+          margin-bottom: 0.3rem;
+        }
+        &:hover {
+          background-color: gtkalpha($foreground, 0.35);
+        }
+      }
     }
 
     &:hover {

@@ -4,7 +4,7 @@ import { App, Gtk } from "astal/gtk4";
 import { bind } from "astal";
 import { WINDOW_NAME } from "../battery/BatteryWindow";
 
-export default function BatteryPanelButton() {
+export default function BatteryPanelButton({ showLabel = false }) {
   const battery = AstalBattery.get_default();
 
   return (
@@ -21,11 +21,13 @@ export default function BatteryPanelButton() {
           iconName={bind(battery, "battery-icon-name")}
           cssClasses={["icon"]}
         />
-        <label
-          label={bind(battery, "percentage").as(
-            (p) => `${Math.floor(p * 100)}%`,
-          )}
-        />
+        {showLabel && (
+          <label
+            label={bind(battery, "percentage").as(
+              (p) => `${Math.floor(p * 100)}%`,
+            )}
+          />
+        )}
       </box>
     </PanelButton>
   );

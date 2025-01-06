@@ -1,4 +1,4 @@
-import GObject, { register, property } from "astal/gobject";
+import GObject, { register } from "astal/gobject";
 import { monitorFile, readFileAsync } from "astal/file";
 import { exec, execAsync } from "astal/process";
 
@@ -6,6 +6,7 @@ const get = (args) => Number(exec(`brightnessctl ${args}`));
 const screen = exec(`bash -c "ls -w1 /sys/class/backlight | head -1"`);
 const kbd = exec(`bash -c "ls -w1 /sys/class/leds | head -1"`);
 
+// I know there's a property decorator but I can't get it to work
 @register({
   GTypeName: "Brightness",
   Properties: {
@@ -39,9 +40,7 @@ export default class Brightness extends GObject.Object {
   }
 
   #kbdMax = get(`--device ${kbd} max`);
-  //_kbd = get(`--device ${kbd} get`);
   #screenMax = get("max");
-  //_screen = get("get") / (get("max") || 1);
 
   get kbd() {
     return this._kbd;

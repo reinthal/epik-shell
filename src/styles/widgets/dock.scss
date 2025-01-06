@@ -16,30 +16,36 @@
     }
   }
 
-  overlay {
-    .app-button {
-      padding: 0.6rem;
+  .app-button {
+    .box {
+      padding: 0.2rem;
+      min-width: 45px;
+      min-height: 45px;
     }
 
+    image {
+      margin-bottom: 10px;
+    }
+
+    &:hover {
+      background-color: transparent;
+      image {
+        -gtk-icon-size: 40px;
+      }
+    }
+
+    &.focused {
+      .indicator {
+        min-width: 32px;
+      }
+    }
     .indicator {
       min-width: 5px;
       min-height: 5px;
       border-radius: 99px;
       background-color: $foreground;
       margin-bottom: 1px;
-    }
-
-    &.focused {
-      .indicator {
-        background-color: $background;
-      }
-      .app-button {
-        box-shadow: 0 0 0 calc($border-width/3) $border-color;
-        background-color: $foreground;
-        image {
-          color: $background;
-        }
-      }
+      transition: min-width 0.4s ease-in-out;
     }
   }
 }

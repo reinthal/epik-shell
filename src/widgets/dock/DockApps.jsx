@@ -1,5 +1,6 @@
+import { timeout } from "astal";
 import { bind } from "astal";
-import { Gtk } from "astal/gtk4";
+import { App, Gtk } from "astal/gtk4";
 import AstalApps from "gi://AstalApps?version=0.1";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import AstalMpris from "gi://AstalMpris?version=0.1";
@@ -18,46 +19,48 @@ function AppButton({ app, onClicked, term, pinned = false, client }) {
   const iconName = substitute[app.iconName] ?? app.iconName;
 
   return (
-    <overlay
+    <button
+      onClicked={onClicked}
       cssClasses={bind(hyprland, "focused-client").as((fcsClient) => {
-        const classes = [];
-        if (term == "" || fcsClient == null) return [];
+        const classes = ["app-button"];
+        if (term == "" || fcsClient == null) return classes;
 
         if (!pinned) {
-          if (client.address === fcsClient.address) {
+          if (client.address == fcsClient.address) {
             classes.push("focused");
           }
           return classes;
         }
 
-        if (fcsClient.class.toLowerCase().includes(term.toLowerCase())) {
+        if (fcsClient?.class.toLowerCase().includes(term.toLowerCase())) {
           classes.push("focused");
         }
 
         return classes;
       })}
     >
-      <button onClicked={onClicked} cssClasses={["app-button"]}>
+      <overlay>
+        <box cssClasses={["box"]} />
         <image
+          type="overlay"
+          halign={Gtk.Align.CENTER}
+          valign={Gtk.Align.END}
           iconName={`${iconName}-symbolic`}
           iconSize={Gtk.IconSize.LARGE}
         />
-      </button>
-      <box
-        type="overlay"
-        cssClasses={["indicator"]}
-        valign={Gtk.Align.END}
-        halign={Gtk.Align.CENTER}
-        visible={
-          pinned &&
-          bind(hyprland, "clients").as((clients) => {
+        <box
+          type="overlay"
+          cssClasses={["indicator"]}
+          valign={Gtk.Align.END}
+          halign={Gtk.Align.CENTER}
+          visible={bind(hyprland, "clients").as((clients) => {
             return clients
               .map((e) => e.class.toLowerCase())
               .includes(term.toLowerCase());
-          })
-        }
-      />
-    </overlay>
+          })}
+        />
+      </overlay>
+    </button>
   );
 }
 
@@ -85,8 +88,12 @@ function AppsList() {
           pinned={true}
           onClicked={() => {
             for (const client of hyprland.get_clients()) {
-              if (client.class.toLowerCase().includes(term.toLowerCase()))
+              if (client.class.toLowerCase().includes(term.toLowerCase())) {
+                timeout(1, () => {
+                  App.get_window("dock-hover").set_visible(true);
+                });
                 return client.focus();
+              }
             }
 
             app.launch();
@@ -113,7 +120,12 @@ function AppsList() {
                 return (
                   <AppButton
                     app={app}
-                    onClicked={() => client.focus()}
+                    onClicked={() => {
+                      timeout(1, () => {
+                        App.get_window("dock-hover").set_visible(true);
+                      });
+                      client.focus();
+                    }}
                     term={client.class}
                     client={client}
                   />
