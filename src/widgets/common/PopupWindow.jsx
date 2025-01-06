@@ -2,14 +2,12 @@ import { App, Astal, Gdk, Gtk } from "astal/gtk4";
 
 function Padding({ winName }) {
   return (
-    <box
-      onButtonReleased={(_, event) => {
-        if (event.get_button() == Gdk.BUTTON_PRIMARY) {
-          App.toggle_window(winName);
-        }
-      }}
-      vexpand
+    <button
+      cssClasses={["button-padding"]}
+      canFocus={false}
+      onClicked={() => App.toggle_window(winName)}
       hexpand
+      vexpand
     />
   );
 }

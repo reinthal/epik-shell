@@ -3,12 +3,9 @@ import windows from "./windows";
 import { windowAnimation, windowBlur } from "./utils/hyprland";
 import request from "./request";
 import { initGtkStyle } from "./utils/style";
-import { GLib } from "astal";
 
 export default async function start(style) {
   await initGtkStyle();
-
-  GLib.setenv("LD_PRELOAD", "", true);
 
   App.start({
     css: style,

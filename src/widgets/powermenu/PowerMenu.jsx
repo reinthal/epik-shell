@@ -1,4 +1,4 @@
-import { Astal } from "astal/gtk4";
+import { Astal, Gtk } from "astal/gtk4";
 import Powermenu from "../../utils/powermenu";
 import PopupWindow from "../common/PopupWindow";
 
@@ -19,7 +19,7 @@ function SysButton({ action, label }) {
       onClicked={() => powermenu.action(action)}
     >
       <box vertical spacing={6}>
-        <image iconName={icons[action]} />
+        <image iconName={icons[action]} iconSize={Gtk.IconSize.LARGE} />
         <label label={label} />
       </box>
     </button>
