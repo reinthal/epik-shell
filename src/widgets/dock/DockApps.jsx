@@ -102,6 +102,7 @@ function AppsList() {
       ))}
       {bind(hyprland, "clients").as((clients) =>
         clients
+          .reverse()
           .map((client) => {
             for (const appClass of pinnedApps) {
               if (client.class.toLowerCase().includes(appClass.toLowerCase())) {
@@ -133,8 +134,7 @@ function AppsList() {
               }
             }
           })
-          .filter((item) => item !== undefined)
-          .reverse(),
+          .filter((item) => item !== undefined),
       )}
     </box>
   );

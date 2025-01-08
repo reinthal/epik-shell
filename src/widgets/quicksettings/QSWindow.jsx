@@ -6,41 +6,23 @@ import DontDisturbQS from "./buttons/DontDisturbQS";
 import RecordQS from "./buttons/RecordQS";
 import MicQS from "./buttons/MicQS";
 import BrightnessBox from "./BrightnessBox";
-import { astalify, Gtk } from "astal/gtk4";
+import { Gtk } from "astal/gtk4";
 import { WINDOW_NAME as POWERMENU_WINDOW } from "../powermenu/PowerMenu";
 import { App } from "astal/gtk4";
+import { FlowBox } from "../common/FlowBox";
 
 export const WINDOW_NAME = "quicksettings";
 
 function QSButtons() {
-  const maxColumn = 3;
-  const Grid = astalify(Gtk.Grid, {
-    setChildren(grid, children) {
-      grid.set_column_homogeneous(true);
-      grid.set_row_homogeneous(true);
-      grid.set_column_spacing(6);
-      grid.set_row_spacing(6);
-      children.forEach((child, index) => {
-        grid.attach(
-          child,
-          index % maxColumn,
-          Math.floor(index / maxColumn),
-          1,
-          1,
-        );
-      });
-    },
-  });
-
   return (
-    <Grid>
+    <FlowBox maxChildrenPerLine={3} homogeneous>
       <DarkModeQS />
       <ColorPickerQS />
       <ScreenshotQS />
       <MicQS />
       <DontDisturbQS />
       <RecordQS />
-    </Grid>
+    </FlowBox>
   );
 }
 

@@ -1,6 +1,5 @@
 import { App, Astal, Gtk } from "astal/gtk4";
 import { bind } from "astal";
-import Divider from "./Divider";
 import TimePanelButton from "./TimePanelButton";
 import BatteryPanelButton from "./BatteryPanelButton";
 import WorkspacesPanelButton from "./WorkspacesPanelButton";
@@ -19,9 +18,12 @@ function Start() {
   return (
     <box halign={Gtk.Align.START}>
       <LauncherPanelButton />
-      <Divider />
+      <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <WorkspacesPanelButton />
-      <Divider visible={bind(screenRecord, "recording")} />
+      <Gtk.Separator
+        orientation={Gtk.Orientation.VERTICAL}
+        visible={bind(screenRecord, "recording")}
+      />
       <RecordIndicatorPanelButton />
     </box>
   );
@@ -31,7 +33,7 @@ function Center() {
   return (
     <box>
       <TimePanelButton />
-      <Divider />
+      <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <NotifPanelButton />
     </box>
   );
@@ -41,13 +43,13 @@ function End() {
   return (
     <box halign={Gtk.Align.END}>
       <NetworkSpeedPanelButton />
-      <Divider />
+      <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <NetworkPanelButton />
-      <Divider />
+      <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <BatteryPanelButton />
-      <Divider />
+      <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <AudioPanelButton />
-      <Divider />
+      <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <QSPanelButton />
     </box>
   );
@@ -59,6 +61,8 @@ export default function Bar(gdkmonitor) {
   return (
     <window
       visible
+      name={"bar"}
+      namespace={"bar"}
       cssClasses={["Bar"]}
       gdkmonitor={gdkmonitor}
       anchor={TOP | LEFT | RIGHT}

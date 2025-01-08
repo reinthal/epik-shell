@@ -1,4 +1,4 @@
-import GObject, { register, property } from "astal/gobject";
+import GObject, { register } from "astal/gobject";
 import { App } from "astal/gtk4";
 
 const options = {
