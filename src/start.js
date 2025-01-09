@@ -8,10 +8,6 @@ import { monitorFile } from "astal";
 export default async function start(style) {
   await initGtkStyle();
 
-  monitorFile(`${SRC}/styles`, (file, event) => {
-    print("Changed");
-  });
-
   App.start({
     css: style,
     requestHandler(req, res) {
