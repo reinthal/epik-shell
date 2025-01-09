@@ -1,5 +1,8 @@
 # Epik Shell
 
+> [!WARNING]
+> This repository is regularly updated
+
 A shell based on [Astal](https://github.com/Aylur/Astal/).
 
 ## Screenshots

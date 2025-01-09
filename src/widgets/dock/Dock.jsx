@@ -1,5 +1,5 @@
 import { Variable } from "astal";
-import { App, Astal } from "astal/gtk4";
+import { App, Astal, hook } from "astal/gtk4";
 import AstalHyprland from "gi://AstalHyprland?version=0.1";
 import DockApps from "./DockApps";
 import { exec } from "astal";
@@ -38,6 +38,7 @@ export function DockHover(_gdkmonitor) {
 		min-width: ${width}px;
 		min-height: ${height}px;
 		color: transparent;
+		padding: 1px;
 	}`);
 
   App.connect("window-toggled", (_, win) => {
@@ -47,6 +48,7 @@ export function DockHover(_gdkmonitor) {
 		min-width: ${size.width}px;
 		min-height: ${height}px;
 		color: transparent;
+		padding: 1px;
 	}`);
     }
   });
@@ -56,7 +58,7 @@ export function DockHover(_gdkmonitor) {
       visible={dockVisible((v) => !v)}
       name={"dock-hover"}
       setup={(self) => {
-        App.connect("window-toggled", (_, win) => {
+        hook(self, App, "window-toggled", (_, win) => {
           if (win.name == "dock" && win.visible) {
             self.visible = false;
           }
@@ -71,7 +73,7 @@ export function DockHover(_gdkmonitor) {
       <box cssClasses={["dock-padding"]}>
         {/* I dont know why window/box not visible when there's no child/background-color */}
         {/* So I give this child and set it to transparent so I can detect hover */}
-        <label label={"Placeholder"} />
+        placeholder
       </box>
     </window>
   );
@@ -86,7 +88,7 @@ export default function Dock(_gdkmonitor) {
       animation="slide up"
       anchor={Astal.WindowAnchor.BOTTOM}
       setup={(self) => {
-        App.connect("window-toggled", (_, win) => {
+        hook(self, App, "window-toggled", (_, win) => {
           if (win.name == "dock-hover" && win.visible) {
             self.visible = false;
           }

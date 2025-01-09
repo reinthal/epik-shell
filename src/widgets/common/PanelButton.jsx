@@ -1,4 +1,4 @@
-import { App } from "astal/gtk4";
+import { App, hook } from "astal/gtk4";
 
 export default function PanelButton({ child, window = "", setup, ...props }) {
   return (
@@ -10,7 +10,7 @@ export default function PanelButton({ child, window = "", setup, ...props }) {
 
           self.add_css_class(window);
 
-          App.connect("window-toggled", (_, win) => {
+          hook(self, App, "window-toggled", (_, win) => {
             const winName = win.name;
             const visible = win.visible;
 

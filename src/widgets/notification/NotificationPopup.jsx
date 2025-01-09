@@ -1,5 +1,5 @@
 import { timeout } from "astal";
-import { App, Astal } from "astal/gtk4";
+import { App, Astal, hook } from "astal/gtk4";
 import AstalNotifd from "gi://AstalNotifd?version=0.1";
 import Notification from "./Notification";
 
@@ -14,7 +14,7 @@ export default function NotificationPopup(gdkmonitor) {
         const notificationQueue = [];
         let isProcessing = false;
 
-        notifd.connect("notified", (_, id) => {
+        hook(self, notifd, "notified", (_, id) => {
           if (
             notifd.dont_disturb &&
             notifd.get_notification(id).urgency != AstalNotifd.Urgency.CRITICAL
@@ -25,7 +25,7 @@ export default function NotificationPopup(gdkmonitor) {
           processQueue();
         });
 
-        notifd.connect("resolved", (_, __) => {
+        hook(self, notifd, "resolved", (_, __) => {
           self.visible = false;
           isProcessing = false;
           timeout(300, () => {

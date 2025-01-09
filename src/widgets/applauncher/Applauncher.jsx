@@ -1,4 +1,4 @@
-import { App, Gtk } from "astal/gtk4";
+import { App, Gtk, hook } from "astal/gtk4";
 import { exec, Variable } from "astal";
 import Pango from "gi://Pango?version=1.0";
 import AstalApps from "gi://AstalApps?version=0.1";
@@ -74,7 +74,7 @@ function SearchEntry() {
         placeholderText="Search..."
         text={text.get()}
         setup={(self) => {
-          App.connect("window-toggled", (_, win) => {
+          hook(self, App, "window-toggled", (_, win) => {
             const winName = win.name;
             const visible = win.visible;
 

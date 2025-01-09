@@ -1,7 +1,7 @@
 import { bind } from "astal";
 import Powermenu from "../../utils/powermenu";
 import PopupWindow from "../common/PopupWindow";
-import { App, Astal } from "astal/gtk4";
+import { App, Astal, hook } from "astal/gtk4";
 import { exec } from "astal";
 
 const WINDOW_NAME = "verification";
@@ -25,7 +25,7 @@ export default function VerificationWindow(_gdkmonitor) {
             label={"No"}
             onClicked={() => App.toggle_window(WINDOW_NAME)}
             setup={(self) => {
-              App.connect("window-toggled", (_, win) => {
+              hook(self, App, "window-toggled", (_, win) => {
                 if (win.name === WINDOW_NAME && win.visible) self.grab_focus();
               });
             }}

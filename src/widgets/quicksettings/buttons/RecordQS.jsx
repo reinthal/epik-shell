@@ -1,4 +1,4 @@
-import { App } from "astal/gtk4";
+import { App, hook } from "astal/gtk4";
 import ScreenRecord from "../../../utils/screen-record";
 import QSButton from "../QSButton";
 import { WINDOW_NAME } from "../QSWindow";
@@ -11,7 +11,7 @@ export default function RecordQS() {
   return (
     <QSButton
       setup={(self) => {
-        screenRecord.connect("notify::recording", () => {
+        hook(self, screenRecord, "notify::recording", () => {
           if (screenRecord.recording) {
             self.add_css_class("active");
           } else {
