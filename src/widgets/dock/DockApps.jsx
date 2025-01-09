@@ -77,7 +77,7 @@ function AppsList() {
       app: application.list.find((e) => e.entry.split(".desktop")[0] == term),
       term,
     }))
-    .filter((app) => app);
+    .filter(({ app }) => app);
 
   return (
     <box spacing={6}>
