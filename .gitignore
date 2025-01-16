@@ -1,6 +1,5 @@
 node_modules/
 @girs/
-/app.js
 style.css
 *.css.map
 app.js.map
