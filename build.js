@@ -16,15 +16,11 @@ async function execAsync(cmd) {
 
 const currentDir = GLib.path_get_dirname(programPath);
 
-const entry = `${currentDir}/src/epik.js`;
-const outfile = `${currentDir}/app.js`;
-
-const styleEntry = `${currentDir}/src/styles.scss`;
-const styleOut = `${currentDir}/style.css`;
+const entry = `${currentDir}/app.js`;
+const outfile = `${GLib.get_user_runtime_dir()}/epikshell.js`;
 
 //bundle js and scss
 try {
-  await execAsync(["sass", styleEntry, styleOut]);
   await execAsync([
     "esbuild",
     "--bundle",
@@ -36,8 +32,7 @@ try {
     "--external:system",
     "--platform=node",
     "--loader:.js=ts",
-    `--define:SRC="${currentDir}/src"`,
-    `--define:COMPILED_CSS="${styleOut}"`,
+    `--define:SRC="${currentDir}"`,
   ]);
 } catch (error) {
   console.error(error);

@@ -56,7 +56,7 @@ A shell based on [Astal](https://github.com/Aylur/Astal/).
    ```
    You can also use ags:
    ```bash
-   ags run --gtk4 ./src
+   ags run --gtk4 -d ./src
    ```
    or:
    ```bash
