@@ -51,7 +51,13 @@ export class Opt extends Variable {
     const dir = this.cached ? `${cacheDir}/options.json` : configFile;
 
     if (GLib.file_test(dir, GLib.FileTest.EXISTS)) {
-      const config = JSON.parse(readFile(dir) || {});
+      let config;
+      try {
+        config = JSON.parse(readFile(dir));
+      } catch {
+        config = {};
+      }
+      //const config = JSON.parse(readFile(dir) || "{}");
       const configV = this.cached
         ? config[this.id]
         : getNestedValue(config, this.id);
@@ -95,9 +101,17 @@ function getOptions(object, path = "") {
   });
 }
 
-function transformObject(obj) {
+function transformObject(obj, initial) {
   if (obj instanceof Opt) {
-    return obj.cached ? undefined : obj.get();
+    if (obj.cached) {
+      return;
+    } else {
+      if (initial) {
+        return obj.initial;
+      } else {
+        return obj.get();
+      }
+    }
   }
 
   if (typeof obj !== "object") return;
@@ -105,12 +119,38 @@ function transformObject(obj) {
   const newObj = {};
 
   Object.keys(obj).forEach((key) => {
-    newObj[key] = transformObject(obj[key]);
+    newObj[key] = transformObject(obj[key], initial);
   });
 
   const length = Object.keys(JSON.parse(JSON.stringify(newObj))).length;
 
   return length > 0 ? newObj : undefined;
+}
+
+function deepMerge(target, source) {
+  if (typeof target !== "object" || target === null) {
+    return source;
+  }
+
+  if (typeof source !== "object" || source === null) {
+    return source;
+  }
+
+  const result = Array.isArray(target) ? [] : { ...target };
+
+  for (const key in source) {
+    if (source.hasOwnProperty(key)) {
+      if (Array.isArray(source[key])) {
+        result[key] = [...source[key]];
+      } else if (typeof source[key] === "object" && source[key] !== null) {
+        result[key] = deepMerge(target[key], source[key]);
+      } else {
+        result[key] = source[key];
+      }
+    }
+  }
+
+  return result;
 }
 
 export function mkOptions(configFile, object) {
@@ -119,10 +159,18 @@ export function mkOptions(configFile, object) {
   }
 
   ensureDirectory(configFile.split("/").slice(0, -1).join("/"));
+  const defaultConfig = transformObject(object, true);
+  print(JSON.stringify(defaultConfig, null, 1));
   const configVar = Variable(transformObject(object));
 
   if (GLib.file_test(configFile, GLib.FileTest.EXISTS)) {
-    configVar.set(JSON.parse(readFile(configFile)));
+    let configData;
+    try {
+      configData = JSON.parse(readFile(configFile) || "{}");
+    } catch {
+      configData = {};
+    }
+    configVar.set(deepMerge(configVar.get(), configData));
   }
 
   function updateConfig(oldConfig, newConfig, path = "") {
@@ -149,9 +197,14 @@ export function mkOptions(configFile, object) {
   }
 
   monitorFile(configFile, (_, event) => {
-    if (event == Gio.FileMonitorEvent.CHANGED) {
-      const cache = JSON.parse(readFile(configFile) || "{}");
-      updateConfig(configVar.get(), cache);
+    if (event == Gio.FileMonitorEvent.ATTRIBUTE_CHANGED) {
+      let cache;
+      try {
+        cache = JSON.parse(readFile(configFile) || "{}");
+      } catch {
+        cache = {};
+      }
+      updateConfig(configVar.get(), deepMerge(defaultConfig, cache));
     }
   });
 
