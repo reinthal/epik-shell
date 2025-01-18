@@ -160,7 +160,6 @@ export function mkOptions(configFile, object) {
 
   ensureDirectory(configFile.split("/").slice(0, -1).join("/"));
   const defaultConfig = transformObject(object, true);
-  print(JSON.stringify(defaultConfig, null, 1));
   const configVar = Variable(transformObject(object));
 
   if (GLib.file_test(configFile, GLib.FileTest.EXISTS)) {
