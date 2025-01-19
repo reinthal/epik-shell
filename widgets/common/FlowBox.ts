@@ -1,5 +1,4 @@
-import { ConstructProps } from "astal/gtk4";
-import { astalify, Gtk } from "astal/gtk4";
+import { astalify, Gtk, ConstructProps } from "astal/gtk4";
 
 export type FlowBoxProps = ConstructProps<
   Gtk.FlowBox,

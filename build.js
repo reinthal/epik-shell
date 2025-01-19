@@ -16,7 +16,7 @@ async function execAsync(cmd) {
 
 const currentDir = GLib.path_get_dirname(programPath);
 
-const entry = `${currentDir}/app.js`;
+const entry = `${currentDir}/app.ts`;
 const outfile = `${GLib.get_user_runtime_dir()}/epikshell.js`;
 
 //bundle js and scss

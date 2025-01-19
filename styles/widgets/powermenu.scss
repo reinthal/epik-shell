@@ -33,10 +33,24 @@
 .powermenu-container {
   padding: $window-padding;
 
+  flowboxchild {
+    outline: unset;
+    padding: 0;
+
+    &:selected {
+      // outline: unset;
+      box-shadow: 0 0 0 2px $window-border-color;
+      background-color: transparent;
+    }
+  }
+
   .system-button {
     background-color: color.adjust($fg, $alpha: -0.9);
     padding: 0.7rem;
     border-radius: $window-border-radius;
+    &:selected {
+      background-color: red;
+    }
 
     &:focus {
       outline-color: $fg;
