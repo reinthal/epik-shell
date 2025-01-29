@@ -75,10 +75,9 @@
     }
 
     button {
-      background-color: transparent;
       padding: 0 0.3rem;
+      background-color: color.adjust($fg, $alpha: -0.9);
       border-radius: calc(nth($window-border-radius, 1) / 2);
-      box-shadow: 0 0 0 0.1rem color.adjust($fg, $alpha: -0.8);
     }
   }
 
@@ -109,9 +108,8 @@
     margin-top: 0.5rem;
     button {
       padding: 0.1rem 0;
-      background-color: transparent;
+      background-color: color.adjust($fg, $alpha: -0.9);
       border-radius: calc(nth($window-border-radius, 1) / 2);
-      box-shadow: 0 0 0 0.1rem color.adjust($fg, $alpha: -0.8);
     }
   }
 }

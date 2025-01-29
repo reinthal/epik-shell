@@ -2,6 +2,7 @@ import { timeout } from "astal";
 import { App, Astal, hook, Gdk } from "astal/gtk4";
 import AstalNotifd from "gi://AstalNotifd";
 import Notification from "./Notification";
+import { sendBatch } from "../../utils/hyprland";
 
 export default function NotificationPopup(gdkmonitor: Gdk.Monitor) {
   const { TOP } = Astal.WindowAnchor;
@@ -11,6 +12,7 @@ export default function NotificationPopup(gdkmonitor: Gdk.Monitor) {
     <window
       namespace={"notification-popup"}
       setup={(self) => {
+        sendBatch([`layerrule animation slide top, ${self.namespace}`]);
         const notificationQueue: number[] = [];
         let isProcessing = false;
 
@@ -47,9 +49,9 @@ export default function NotificationPopup(gdkmonitor: Gdk.Monitor) {
           self.visible = true;
 
           timeout(5000, () => {
-            self.set_child(null);
             self.visible = false;
             isProcessing = false;
+            self.set_child(null);
             timeout(300, () => {
               processQueue();
             });
@@ -58,7 +60,6 @@ export default function NotificationPopup(gdkmonitor: Gdk.Monitor) {
       }}
       gdkmonitor={gdkmonitor}
       application={App}
-      //animation="slide top"
       anchor={TOP}
     ></window>
   );
