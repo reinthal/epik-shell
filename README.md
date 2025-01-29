@@ -3,14 +3,13 @@
 > [!WARNING]
 > This repository is regularly updated
 
-A shell based on [Astal](https://github.com/Aylur/Astal/).
+A desktop shell based on [Astal](https://github.com/Aylur/Astal/).
 
 ## Screenshots
 
-![Screenshot 1](https://github.com/user-attachments/assets/63766acc-53e6-4e6c-9a99-4c3eba874dde)  
-![Screenshot 2](https://github.com/user-attachments/assets/17d6b2e9-65a6-4837-b77f-5c61688d5a72)  
-![Screenshot 3](https://github.com/user-attachments/assets/cc80a16d-70dc-4dcb-a6d5-dbbb0a91fc3c)
-
+![2025-01-30_02-33-03](https://github.com/user-attachments/assets/12d46e4f-bbec-4c90-865f-3cbb36866bc9)
+![2025-01-30_02-36-54](https://github.com/user-attachments/assets/1fa2dc55-41f8-46d6-bfac-afef2e83c32c)
+![2025-01-30_02-37-16](https://github.com/user-attachments/assets/d9702b1a-2816-48a5-a9f0-00b7999447dd)
 ---
 
 ## Notes
@@ -37,6 +36,11 @@ A shell based on [Astal](https://github.com/Aylur/Astal/).
 - `wayshot`
 - `slurp`
 - `wl-copy`
+- `brightnessctl`
+
+```bash
+sudo pacman -S libastal-meta libastal-gjs-git dart-sass esbuild hyprpicker swappy wf-recorder wayshot slurp wl-copy brightnessctl
+```
 
 ---
 
@@ -62,6 +66,98 @@ A shell based on [Astal](https://github.com/Aylur/Astal/).
    ```bash
    ags run --gtk4 -d <FULL-PATH-TO-SRC-FOLDER>
    ```
+
+---
+
+## Configuration
+Epik Shell looks for a configuration file in the config directory (~/.config/epik-shell/config.json).
+Configuration comes with the following defaults:
+> [!WARNING]
+> Don't copy and paste this entire block into your `config.json`, it's just to show which configurations are available.
+
+```jsonc
+{
+  "dock": {
+    "position": "bottom", // "top" | "bottom"
+    "pinned": ["firefox", "Alacritty", "org.gnome.Nautilus", "localsend"], // array of application classname
+  },
+  "bar": {
+    "position": "top", // "top" | "bottom"
+    "separator": true,
+    // modules to show in start, center, and end of bar.
+    // available options: "launcher", "workspace", "time", "notification", "network_speed", "quicksetting"
+    "start": ["launcher", "workspace"],
+    "center": ["time", "notification"],
+    "end": ["network_speed", "quicksetting"],
+  },
+  "desktop_clock": {
+    "position": "top_left", // "top_left" | "top" | "top_right" | "left" | "center" | "right" | "bottom_left" | "bottom" | "bottom_right"
+  },
+  "theme": {
+    "bar": {
+      "bg_color": "$bg", // css color values (name -> red, rgb -> rgb(50, 50, 50), etc), or use theme color with "$" prefix ($bg, $accent, etc)
+      "opacity": 1,
+      "border_radius": 6, // in px, support css style (top, right, bottom, left -> [10, 15, 20, 10])
+      "margin": 10, // in px, support css style
+      "padding": 3, // in px, support css style
+      "border_width": 2,
+      "border_color": "$fg", // css color values or use theme color
+      "shadow": {
+        "offset": [6, 6], // in px, can be [horizontal, vertical] or single number
+        "blur": 0,
+        "spread": 0,
+        "color": "$fg", // css color values or use theme color
+        "opacity": 1,
+      },
+      "button": {
+        "bg_color": "$bg",
+        "fg_color": "$fg",
+        "opacity": 1,
+        "border_radius": 8,
+        "border_width": 0,
+        "border_color": "$fg",
+        "padding": [0, 4],
+        "shadow": {
+          "offset": [0, 0],
+          "blur": 0,
+          "spread": 0,
+          "color": "$fg",
+          "opacity": 1,
+        },
+      },
+    },
+    "window": {
+      "opacity": 1,
+      "border_radius": 6,
+      "margin": 10,
+      "padding": 10,
+      "dock_padding": 4,
+      "desktop_clock_padding": 4,
+      "border_width": 2,
+      "border_color": "$fg",
+      "shadow": {
+        "offset": [6, 6],
+        "blur": 0,
+        "spread": 0,
+        "color": "$fg",
+        "opacity": 1,
+      },
+    },
+    "light": {
+      "bg": "#fbf1c7",
+      "fg": "#3c3836",
+      "accent": "#3c3836",
+      "red": "#cc241d",
+    },
+    "dark": {
+      "bg": "#282828",
+      "fg": "#ebdbb2",
+      "accent": "#ebdbb2",
+      "red": "#cc241d",
+    },
+  },
+}
+```
 
 ---
 
