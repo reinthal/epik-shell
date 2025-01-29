@@ -168,7 +168,7 @@ You can check some configurations in the [wiki](https://github.com/ezerinz/epik-
 ### Theme Settings
 
 - **Theme:** `adw-gtk3`
-- **Icons:** `Qogir`
+- **Icons:** `Colloid`
 
 ### Making GTK Apps Match Astal Theme
 
