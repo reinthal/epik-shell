@@ -15,8 +15,7 @@ scale {
   trough {
     border-radius: calc(nth($window-border-radius, 1) * 99);
     highlight {
-      background-color: $fg;
-      color: $fg;
+      background-color: $accent;
       min-height: 25px;
       // min-width: 25px;
       border-radius: calc(nth($window-border-radius, 1) * 99);
@@ -125,7 +124,7 @@ $shadow-v: nth($bar-button-shadow-offset, 2);
   }
 
   &.active {
-    background-color: $bar-button-fg-color;
+    background-color: $accent;
     color: $bar-button-bg-color;
   }
 }

@@ -22,18 +22,20 @@
     }
 
     grid > * {
-      outline: unset;
+      border-radius: $window-border-radius;
+      outline-color: $accent;
+      // outline: unset;
     }
 
     .day-number {
       &:selected {
         color: $bg;
-        background-color: $fg;
+        background-color: $accent;
       }
     }
     .today {
       border-radius: $window-border-radius;
-      box-shadow: 0 0 0 0.1rem $fg;
+      box-shadow: 0 0 0 0.1rem $accent;
     }
   }
 }

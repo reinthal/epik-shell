@@ -131,9 +131,10 @@ async function initScss(mode: ThemeMode) {
   const colors = theme[mode];
 
   const scssVar = [
-    defineVar(colors.red, "string", 1),
-    defineVar(colors.fg, "string", 1),
     defineVar(colors.bg, "string", 1),
+    defineVar(colors.fg, "string", 1),
+    defineVar(colors.accent, "string", 1),
+    defineVar(colors.red, "string", 1),
     defineVar(window.opacity, "number_only"),
     defineVar(window.border_radius, "number_or_array"),
     defineVar(window.margin, "number_or_array"),
@@ -147,7 +148,7 @@ async function initScss(mode: ThemeMode) {
     defineVar(window.shadow.spread, "number", 3),
     defineVar(window.shadow.color, "string", 3),
     defineVar(window.shadow.opacity, "number_only", 3),
-    defineVar(bar.separator),
+    defineVar(options.bar.separator),
     defineVar(bar.border_radius, "number_or_array"),
     defineVar(bar.bg_color),
     defineVar(bar.opacity, "number_only"),
@@ -180,7 +181,7 @@ async function initScss(mode: ThemeMode) {
 }
 
 export default async function () {
-  options.handler(["theme", "bar.position"], async () => {
+  options.handler(["theme", "bar.position", "bar.separator"], async () => {
     const mode = options.theme.mode.get() as ThemeMode;
     await initGtk(mode, true).catch(console.error);
     await initScss(mode).catch(console.error);

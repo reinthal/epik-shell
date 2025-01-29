@@ -20,9 +20,23 @@ const options = mkOptions(
     },
     bar: {
       position: opt("top"),
+      separator: opt(true),
       start: opt(["launcher", "workspace"]),
       center: opt(["time", "notification"]),
       end: opt(["network_speed", "quicksetting"]),
+    },
+    desktop_clock: {
+      position: opt<
+        | "top_left"
+        | "top"
+        | "top_right"
+        | "left"
+        | "center"
+        | "right"
+        | "bottom_left"
+        | "bottom"
+        | "bottom_right"
+      >("top_left"),
     },
     theme: {
       mode: opt(
@@ -33,7 +47,6 @@ const options = mkOptions(
       ),
       bar: {
         bg_color: opt("$bg"),
-        separator: opt(true),
         opacity: opt(1),
         border_radius: opt(6),
         margin: opt(10),
@@ -84,11 +97,13 @@ const options = mkOptions(
       light: {
         bg: opt("#fbf1c7"),
         fg: opt("#3c3836"),
+        accent: opt("#3c3836"),
         red: opt("#cc241d"),
       },
       dark: {
         bg: opt("#282828"),
         fg: opt("#ebdbb2"),
+        accent: opt("#ebdbb2"),
         red: opt("#cc241d"),
       },
     },

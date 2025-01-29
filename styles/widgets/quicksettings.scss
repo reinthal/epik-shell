@@ -19,7 +19,7 @@
       }
     }
     &.active {
-      background-color: $fg;
+      background-color: $accent;
       color: $bg;
     }
   }
@@ -82,7 +82,7 @@
       outline-color: $fg;
       &:checked {
         color: $bg;
-        background-color: $fg;
+        background-color: $accent;
       }
     }
 
@@ -112,7 +112,7 @@
 
     &.active {
       color: $bg;
-      background-color: $fg;
+      background-color: $accent;
     }
   }
 
@@ -138,7 +138,7 @@
       }
 
       &.active {
-        background-color: $fg;
+        background-color: $accent;
         color: $bg;
       }
 

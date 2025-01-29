@@ -59,12 +59,15 @@ $shadow-v: nth($bar-button-shadow-offset, 2);
       &.active {
         min-width: 2.5rem;
         min-height: 0.95rem;
-        background-color: $bar-button-fg-color;
+        background-color: $accent;
       }
 
       &.occupied {
         box-shadow: unset;
         background-color: $bar-button-fg-color;
+        &.active {
+          background-color: $accent;
+        }
       }
     }
   }

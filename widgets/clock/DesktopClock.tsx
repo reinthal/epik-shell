@@ -1,6 +1,7 @@
 import { App, Astal, Gtk, Gdk } from "astal/gtk4";
 import { range, time } from "../../utils";
 import { Binding } from "astal";
+import options from "../../options";
 
 function Number({ shown }: { shown: string | Binding<string> }) {
   return (
@@ -43,18 +44,41 @@ function UnitBox({
 }
 
 export default function DesktopClock(_gdkmonitor: Gdk.Monitor) {
-  const { TOP, LEFT } = Astal.WindowAnchor;
+  const { TOP, LEFT, RIGHT, BOTTOM } = Astal.WindowAnchor;
+  const handlePos = (pos: string) => {
+    switch (pos) {
+      case "top_left":
+        return TOP | LEFT;
+      case "top":
+        return TOP;
+      case "top_right":
+        return TOP | RIGHT;
+      case "left":
+        return LEFT;
+      case "right":
+        return RIGHT;
+      case "bottom_left":
+        return BOTTOM | LEFT;
+      case "bottom":
+        return BOTTOM;
+      case "bottom_right":
+        return BOTTOM | RIGHT;
+      default:
+        return undefined as unknown as Astal.WindowAnchor;
+    }
+  };
 
   return (
     <window
+      setup={(self) => {
+        self.set_default_size(1, 1);
+      }}
       visible
       layer={Astal.Layer.BOTTOM}
       name={"clock"}
       namespace={"clock"}
-      anchor={TOP | LEFT}
+      anchor={options.desktop_clock.position(handlePos)}
       application={App}
-      //animation={"popin 80%"}
-      defaultHeight={-1}
     >
       <box cssClasses={["clock-container"]} spacing={6}>
         <UnitBox
