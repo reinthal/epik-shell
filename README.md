@@ -70,8 +70,9 @@ sudo pacman -S libastal-meta libastal-gjs-git dart-sass esbuild hyprpicker swapp
 ---
 
 ## Configuration
-Epik Shell looks for a configuration file in the config directory (~/.config/epik-shell/config.json).
+Epik Shell looks for a configuration file in the config directory (`~/.config/epik-shell/config.json`).
 Configuration comes with the following defaults:
+You can check some configurations in the [wiki](https://github.com/ezerinz/epik-shell/wiki/Configuration-Recipes)
 > [!WARNING]
 > Don't copy and paste this entire block into your `config.json`, it's just to show which configurations are available.
 
