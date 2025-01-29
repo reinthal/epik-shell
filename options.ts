@@ -82,7 +82,7 @@ const options = mkOptions(
         border_radius: opt(6),
         margin: opt(10),
         padding: opt(10),
-        dock_padding: opt([0, 4]),
+        dock_padding: opt(4),
         desktop_clock_padding: opt(4),
         border_width: opt(2),
         border_color: opt("$fg"),
