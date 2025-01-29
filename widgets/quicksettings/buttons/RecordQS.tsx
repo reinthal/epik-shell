@@ -1,4 +1,4 @@
-import { App, hook } from "astal/gtk4";
+import { App } from "astal/gtk4";
 import { timeout } from "astal";
 import ScreenRecord from "../../../utils/screenrecord";
 import QSButton from "../QSButton";
@@ -9,15 +9,7 @@ export default function RecordQS() {
 
   return (
     <QSButton
-      setup={(self) => {
-        hook(self, screenRecord, "notify::recording", () => {
-          if (screenRecord.recording) {
-            self.add_css_class("active");
-          } else {
-            self.remove_css_class("active");
-          }
-        });
-      }}
+      connection={[screenRecord, "recording"]}
       onClicked={() => {
         if (screenRecord.recording) {
           screenRecord.stop();

@@ -5,11 +5,7 @@ export default function DarkModeQS() {
   const { mode } = options.theme;
   return (
     <QSButton
-      cssClasses={mode((m) => {
-        const classes = ["qs-button"];
-        m === "dark" && classes.push("active");
-        return classes;
-      })}
+      connection={[mode, null, (v) => v === "dark"]}
       iconName={"dark-mode-symbolic"}
       label={"Dark Mode"}
       onClicked={() => {

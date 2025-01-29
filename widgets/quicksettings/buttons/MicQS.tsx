@@ -6,11 +6,7 @@ export default function MicQS() {
   const wireplumber = AstalWp.get_default()!;
   return (
     <QSButton
-      cssClasses={bind(wireplumber.defaultMicrophone, "mute").as((mute) => {
-        const classes = ["qs-button"];
-        !mute && classes.push("active");
-        return classes;
-      })}
+      connection={[wireplumber.defaultMicrophone, "mute", (v) => !v]}
       iconName={bind(wireplumber.defaultMicrophone, "mute").as((mute) =>
         mute
           ? "microphone-disabled-symbolic"

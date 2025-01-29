@@ -4,6 +4,7 @@ import AstalHyprland from "gi://AstalHyprland";
 import DockApps from "./DockApps";
 import options from "../../options";
 import { WindowProps } from "astal/gtk4/widget";
+import { windowAnimation } from "../../utils/hyprland";
 
 const hyprland = AstalHyprland.get_default();
 const { TOP, BOTTOM } = Astal.WindowAnchor;
@@ -83,7 +84,7 @@ function DockHover(_gdkmonitor: Gdk.Monitor) {
 
 type DockProps = WindowProps & {
   gdkmonitor: Gdk.Monitor;
-  animation: string;
+  animation?: string;
 };
 function Dock({ gdkmonitor, ...props }: DockProps) {
   const anchor = dock.position.get() == "top" ? TOP : BOTTOM;
@@ -128,8 +129,7 @@ function Dock({ gdkmonitor, ...props }: DockProps) {
 }
 
 export default function (gdkmonitor: Gdk.Monitor) {
-  //Dock(gdkmonitor);
-  <Dock gdkmonitor={gdkmonitor} animation="slide bottom" />;
+  <Dock gdkmonitor={gdkmonitor} animation={`slide ${dock.position.get()}`} />;
   dockVisible
     .observe(hyprland, "notify::clients", () => {
       return updateVisibility();
@@ -145,7 +145,7 @@ export default function (gdkmonitor: Gdk.Monitor) {
     const dockW = App.get_window("dock")!;
     dockW.set_child(null);
     dockW.destroy();
-    <Dock gdkmonitor={gdkmonitor} animation="slide bottom" />;
+    <Dock gdkmonitor={gdkmonitor} animation={`slide ${dock.position.get()}`} />;
     const dockHover = App.get_window("dock-hover")!;
     dockHover.set_child(null);
     dockHover.destroy();
@@ -158,5 +158,6 @@ export default function (gdkmonitor: Gdk.Monitor) {
         return updateVisibility();
       });
     DockHover(gdkmonitor);
+    windowAnimation();
   });
 }

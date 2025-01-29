@@ -32,8 +32,7 @@ export default function ScreenshotQS() {
     menu.append(name, `ss.${name}`);
   });
 
-  const Popover = new Gtk.PopoverMenu();
-  Popover.set_menu_model(menu);
+  const Popover = Gtk.PopoverMenu.new_from_model(menu);
 
   return (
     <QSMenuButton

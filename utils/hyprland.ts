@@ -20,7 +20,7 @@ export function windowAnimation() {
       .filter(({ animation }: any) => !!animation)
       .map(
         ({ animation, namespace }: any) =>
-          `layerrule animation ${animation == "slide top" ? `slide ${bar.position.get()}` : animation}, ${namespace}`,
+          `layerrule animation ${namespace == "dock" ? `slide ${options.dock.position.get()}` : animation == "slide top" ? `slide ${bar.position.get()}` : animation}, ${namespace}`,
       ),
   );
 }

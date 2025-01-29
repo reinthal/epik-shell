@@ -34,7 +34,7 @@ const options = mkOptions(
       bar: {
         bg_color: opt("$bg"),
         separator: opt(true),
-        bg_opacity: opt(1),
+        opacity: opt(1),
         border_radius: opt(6),
         margin: opt(10),
         padding: opt(3),
@@ -69,7 +69,7 @@ const options = mkOptions(
         border_radius: opt(6),
         margin: opt(10),
         padding: opt(10),
-        dock_padding: opt(6),
+        dock_padding: opt([0, 4]),
         desktop_clock_padding: opt(4),
         border_width: opt(2),
         border_color: opt("$fg"),

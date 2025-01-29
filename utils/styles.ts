@@ -3,6 +3,7 @@ import { writeFileAsync } from "astal";
 import options from "../options";
 import { bash, gsettings } from ".";
 import { App } from "astal/gtk4";
+import { Opt } from "./option";
 
 const { theme } = options;
 const { window, bar } = theme;
@@ -11,8 +12,8 @@ type ThemeMode = "dark" | "light";
 type ShorthandProperty = {
   top: number;
   right: number;
-  bottom: number;
-  left: number;
+  bottom?: number;
+  left?: number;
 };
 
 async function initGtk(mode: ThemeMode, reset = false) {
@@ -45,7 +46,10 @@ async function initGtk(mode: ThemeMode, reset = false) {
     .catch(console.error);
 }
 
-function shorthand(value: number | number[], length: number) {
+function shorthand(
+  value: number | number[],
+  length: number,
+): ShorthandProperty {
   if (typeof value === "number") {
     return length <= 2
       ? { top: value, right: value }
@@ -56,28 +60,32 @@ function shorthand(value: number | number[], length: number) {
   return length <= 2 ? { top, right } : { top, right, bottom, left };
 }
 
-function applyOffsets(short: ShorthandProperty, element: Object) {
+function applyOffsets(
+  short: ShorthandProperty,
+  element: typeof theme.bar | typeof theme.window,
+) {
   const borderWidth = element.border_width.get();
   const shadowHOffset = element.shadow.offset.get()[0];
   const shadowVOffset = element.shadow.offset.get()[1];
 
   short.top += borderWidth + (shadowVOffset <= 0 ? Math.abs(shadowVOffset) : 0);
   short.right += borderWidth + (shadowHOffset > 0 ? shadowHOffset : 0);
-  short.bottom += borderWidth + (shadowVOffset > 0 ? shadowVOffset : 0);
-  short.left +=
+  short.bottom! += borderWidth + (shadowVOffset > 0 ? shadowVOffset : 0);
+  short.left! +=
     borderWidth + (shadowHOffset <= 0 ? Math.abs(shadowHOffset) : 0);
 
   return short;
 }
 
-function defineVar(opt, type = "string", slice = 2, arrayLength = 4) {
+function defineVar(opt: Opt, type = "string", slice = 2, arrayLength = 4) {
   const value = opt.get();
 
   const typeChecks = {
-    number_only: (val) => typeof val === "number",
-    number: (val) => typeof val === "number",
-    string: (val) => typeof val === "string" || typeof val === "boolean",
-    number_or_array: (val) => typeof val === "number" || Array.isArray(val),
+    number_only: (val: any) => typeof val === "number",
+    number: (val: any) => typeof val === "number",
+    string: (val: any) => typeof val === "string" || typeof val === "boolean",
+    number_or_array: (val: any) =>
+      typeof val === "number" || Array.isArray(val),
   };
 
   if (!typeChecks[type](value)) {
@@ -86,13 +94,13 @@ function defineVar(opt, type = "string", slice = 2, arrayLength = 4) {
     );
   }
 
-  let modifiedVal;
+  let modifiedVal: Record<string, number> | string | unknown;
   switch (type) {
     case "number":
       modifiedVal = `${value}px`;
       break;
     case "number_or_array":
-      let short = shorthand(value, arrayLength);
+      let short = shorthand(value as number | number[], arrayLength);
 
       if (opt.id.startsWith("theme.window.margin")) {
         short = applyOffsets(short, window);
@@ -116,7 +124,7 @@ function defineVar(opt, type = "string", slice = 2, arrayLength = 4) {
   return `$${key}: ${modifiedVal};`;
 }
 
-async function initScss(mode) {
+async function initScss(mode: ThemeMode) {
   const targetDir = `${SRC}/styles/variables.scss`;
   const scss = `${SRC}/styles/styles.scss`;
   const css = `${GLib.get_tmp_dir()}/styles.css`;
@@ -142,7 +150,7 @@ async function initScss(mode) {
     defineVar(bar.separator),
     defineVar(bar.border_radius, "number_or_array"),
     defineVar(bar.bg_color),
-    defineVar(bar.bg_opacity, "number_only"),
+    defineVar(bar.opacity, "number_only"),
     defineVar(bar.margin, "number_or_array"),
     defineVar(bar.padding, "number_or_array"),
     defineVar(bar.border_width, "number"),

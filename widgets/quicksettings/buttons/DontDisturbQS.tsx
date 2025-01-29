@@ -7,11 +7,7 @@ export default function DontDisturbQS() {
 
   return (
     <QSButton
-      cssClasses={bind(notifd, "dontDisturb").as((dnd) => {
-        const classes = ["qs-button"];
-        dnd && classes.push("active");
-        return classes;
-      })}
+      connection={[notifd, "dontDisturb"]}
       onClicked={() => {
         notifd.set_dont_disturb(!notifd.get_dont_disturb());
       }}

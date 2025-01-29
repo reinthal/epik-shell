@@ -3,12 +3,29 @@
 
 .qs-container {
   min-width: 300px;
-  padding: $window-padding;
   button {
     outline-color: $fg;
   }
 
+  .arrow-button {
+    border-radius: $window-border-radius;
+    background-color: color.adjust($fg, $alpha: -0.9);
+
+    > * {
+      padding: 0 4px;
+
+      &:first-child {
+        padding: $window-padding;
+      }
+    }
+    &.active {
+      background-color: $fg;
+      color: $bg;
+    }
+  }
+
   flowbox flowboxchild {
+    padding: 0;
     outline-color: $fg;
     &:selected {
       background-color: transparent;
@@ -16,8 +33,9 @@
   }
 
   separator {
-    margin: 0.7rem 0;
-    margin-top: 0.2rem;
+    margin: 0;
+    // margin: 0.7rem 0;
+    // margin-top: 0.2rem;
   }
 
   .header {
@@ -45,12 +63,12 @@
 
   .qs-box {
     image {
-      margin-left: 0.25rem;
+      // margin-left: 0.25rem;
       padding: 0.5rem;
       border-radius: $window-border-radius;
       background-color: color.adjust($fg, $alpha: -0.9);
     }
-    margin-bottom: 0.7rem;
+    // margin-bottom: 0.7rem;
   }
 
   .qs-button {
@@ -62,11 +80,14 @@
       padding: 1rem 0;
       background-color: transparent;
       outline-color: $fg;
+      &:checked {
+        color: $bg;
+        background-color: $fg;
+      }
     }
 
     popover contents {
       border-radius: $window-border-radius;
-      padding: 0.5rem;
       modelbutton {
         background-color: color.adjust($fg, $alpha: -0.9);
         &:first-child {
@@ -95,8 +116,9 @@
     }
   }
 
-  .battery-page {
-    .profile {
+  .qs-page {
+    margin: $window-padding;
+    .button {
       padding: 0.4rem 0.8rem;
       background-color: color.adjust($fg, $alpha: -0.9);
       border-radius: $window-border-radius;
@@ -123,6 +145,25 @@
       image {
         margin-right: 10px;
       }
+    }
+  }
+
+  .wifi-page {
+    margin: 0;
+    .header {
+      margin: $window-padding;
+      margin-bottom: 0;
+    }
+
+    separator {
+      margin: $window-padding;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    scrolledwindow viewport {
+      padding: $window-padding;
+      padding-top: 0;
     }
   }
 }

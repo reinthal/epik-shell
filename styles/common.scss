@@ -118,7 +118,7 @@ $shadow-v: nth($bar-button-shadow-offset, 2);
 
   &:hover {
     background-color: if(
-      $bar-bg-opacity < 1,
+      $bar-opacity < 1,
       $bar-button-bg-color,
       color.adjust($bar-button-fg-color, $alpha: -0.9)
     );

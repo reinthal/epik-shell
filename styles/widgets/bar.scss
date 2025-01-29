@@ -6,10 +6,7 @@ $shadow-h: nth($bar-button-shadow-offset, 1);
 $shadow-v: nth($bar-button-shadow-offset, 2);
 
 .bar-container {
-  background-color: color.adjust(
-    $bar-bg-color,
-    $alpha: calc($bar-bg-opacity - 1)
-  );
+  background-color: color.adjust($bar-bg-color, $alpha: calc($bar-opacity - 1));
   margin: $bar-margin;
   border-radius: $bar-border-radius;
   padding: $bar-padding;

@@ -1,11 +1,11 @@
 import { GLib, timeout } from "astal";
 import PopupWindow from "../common/PopupWindow";
-import GdkPixbuf from "gi://GdkPixbuf?version=2.0";
+import GdkPixbuf from "gi://GdkPixbuf";
 import { App, Astal, Gtk, hook } from "astal/gtk4";
 import { Gio } from "astal";
 import options from "../../options";
 import { bash, ensureDirectory, sh } from "../../utils";
-import AstalHyprland from "gi://AstalHyprland?version=0.1";
+import { sendBatch } from "../../utils/hyprland";
 
 const { wallpaper } = options;
 const cachePath = `${GLib.get_user_cache_dir()}/epik-shell/wallpapers`;
@@ -55,7 +55,7 @@ function cacheImage(
       fastest ? GdkPixbuf.InterpType.NEAREST : GdkPixbuf.InterpType.BILINEAR,
     );
 
-    const outputFormat = extension === "png" ? "png" : "jpeg"; // Default to jpeg if not png
+    const outputFormat = extension === "png" ? "png" : "jpeg";
     scaledPixbuf?.savev(outputPath, outputFormat, [], []);
 
     return outputPath;
@@ -81,10 +81,12 @@ function wallpaperPicker() {
       name={"wallpaperpicker"}
       visible
       setup={(self) => {
-        const hyprland = AstalHyprland.get_default();
-        hyprland.message(
-          `keyword layerrule animation slide ${options.bar.position.get()}, ${self.namespace}`,
-        );
+        sendBatch([
+          `layerrule animation slide ${options.bar.position.get()}, ${self.namespace}`,
+          `layerrule blur, ${self.namespace}`,
+          `layerrule ignorealpha 0.3, ${self.namespace}`,
+        ]);
+
         hook(self, App, "window-toggled", (_, win) => {
           if (win.name == "wallpaperpicker" && !win.visible) {
             self.set_child(null);
@@ -192,7 +194,7 @@ function wallpaperPicker() {
                             const current = cacheImage(
                               `${path}/${w}`,
                               cachePath,
-                              350,
+                              450,
                               `${w.split(".").shift()}_current`,
                             );
                             GLib.remove(wallpaper.current.get());

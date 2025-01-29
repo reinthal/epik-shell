@@ -10,6 +10,7 @@ import { ButtonProps } from "astal/gtk4/widget";
 
 const hyprland = AstalHyprland.get_default();
 const application = new AstalApps.Apps();
+const iconTheme = new Gtk.IconTheme({ themeName: App.iconTheme });
 
 type AppButtonProps = ButtonProps & {
   app: AstalApps.Application;
@@ -25,14 +26,13 @@ function AppButton({
   client,
 }: AppButtonProps) {
   const substitute = {
-    firefox: "firefox-symbolic",
-    Alacritty: "terminal-symbolic",
-    localsend: "send-to-symbolic",
-    "spotify-client": "org.gnome.Lollypop-spotify-symbolic",
-    "org.gnome.Nautilus": "system-file-manager-symbolic",
+    Alacritty: "terminal",
+    localsend: "send-to",
+    "spotify-client": "org.gnome.Lollypop-spotify",
+    "org.gnome.Nautilus": "system-file-manager",
   };
 
-  const iconName = substitute[app.iconName] ?? app.iconName;
+  const iconName = `${substitute[app.iconName] ?? app.iconName}-symbolic`;
 
   return (
     <button
@@ -56,7 +56,7 @@ function AppButton({
           halign={Gtk.Align.CENTER}
           valign={Gtk.Align.CENTER}
           iconName={`${iconName}`}
-          iconSize={Gtk.IconSize.LARGE}
+          pixelSize={iconTheme.has_icon(`${iconName}`) ? 32 : 38}
         />
         <box
           type="overlay"
@@ -208,7 +208,7 @@ export default function DockApps() {
       ))}
       <Gtk.Separator orientation={Gtk.Orientation.VERTICAL} />
       <AppButton
-        app={{ iconName: "trash-shot" } as AstalApps.Application}
+        app={{ iconName: "user-trash" } as AstalApps.Application}
         onClicked={"nautilus trash:///"}
         term={""}
       />

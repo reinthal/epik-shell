@@ -10,11 +10,15 @@ import VolumeBox from "./VolumeBox";
 import { FlowBox } from "../common/FlowBox";
 import { Gtk, App, Gdk } from "astal/gtk4";
 import { WINDOW_NAME as POWERMENU_WINDOW } from "../powermenu/PowerMenu";
-import { bind, Variable } from "astal";
+import { bind, Binding, GObject, Variable } from "astal";
 import options from "../../options";
 import AstalBattery from "gi://AstalBattery";
-import AstalPowerProfiles from "gi://AstalPowerProfiles";
 import { toggleWallpaperPicker } from "../wallpaperpicker/WallpaperPicker";
+import AstalNetwork from "gi://AstalNetwork";
+import AstalBluetooth from "gi://AstalBluetooth";
+import BatteryPage from "./pages/BatteryPage";
+import SpeakerPage from "./pages/SpeakerPage";
+import WifiPage from "./pages/WifiPage";
 
 export const WINDOW_NAME = "quicksettings";
 export const qsPage = Variable("main");
@@ -33,7 +37,12 @@ const layout = Variable.derive(
 
 function QSButtons() {
   return (
-    <FlowBox maxChildrenPerLine={3} homogeneous>
+    <FlowBox
+      maxChildrenPerLine={3}
+      homogeneous
+      rowSpacing={6}
+      columnSpacing={6}
+    >
       <DarkModeQS />
       <ColorPickerQS />
       <ScreenshotQS />
@@ -92,59 +101,108 @@ function Header() {
   );
 }
 
-function Main() {
+function ArrowButton<T extends GObject.Object>({
+  icon,
+  title,
+  subtitle,
+  onClicked,
+  onArrowClicked,
+  connection: [gobject, property],
+}: {
+  icon: string | Binding<string>;
+  title: string;
+  subtitle: string | Binding<string>;
+  onClicked: () => void;
+  onArrowClicked: () => void;
+  connection: [T, keyof T];
+}) {
   return (
-    <box name={"main"} vertical>
-      <Header />
-      <Gtk.Separator />
-      <BrightnessBox />
-      <VolumeBox />
-      <QSButtons />
+    <box
+      cssClasses={bind(gobject, property).as((p) => {
+        const classes = ["arrow-button"];
+        p && classes.push("active");
+        return classes;
+      })}
+    >
+      <button onClicked={onClicked}>
+        <box halign={Gtk.Align.START} spacing={6}>
+          <image iconName={icon} iconSize={Gtk.IconSize.LARGE} />
+          <box vertical hexpand>
+            <label xalign={0} label={title} cssClasses={["title"]} />
+            <label xalign={0} label={subtitle} cssClasses={["subtitle"]} />
+          </box>
+        </box>
+      </button>
+      <button iconName={"go-next-symbolic"} onClicked={onArrowClicked} />
     </box>
   );
 }
 
-function Battery() {
-  const powerprofiles = AstalPowerProfiles.get_default();
+function WifiBluetooth() {
+  const bluetooth = AstalBluetooth.get_default();
+  const btAdapter = bluetooth.adapter;
+  const deviceConnected = Variable.derive(
+    [bind(bluetooth, "devices"), bind(bluetooth, "isConnected")],
+    (d, _) => {
+      for (const device of d) {
+        if (device.connected) return device.name;
+      }
+      return "No device";
+    },
+  );
+
+  const wifi = AstalNetwork.get_default().wifi;
+  const wifiSsid = Variable.derive(
+    [bind(wifi, "state"), bind(wifi, "ssid")],
+    (state, ssid) => {
+      return state == AstalNetwork.DeviceState.ACTIVATED
+        ? ssid
+        : AstalNetwork.device_state_to_string();
+    },
+  );
   return (
-    <box name={"battery"} cssClasses={["battery-page"]} vertical>
-      <box hexpand={false} cssClasses={["header"]} spacing={6}>
-        <button
-          onClicked={() => {
-            qsPage.set("main");
-          }}
-          iconName={"go-previous-symbolic"}
-        />
-        <label label={"Battery"} hexpand xalign={0} />
-      </box>
+    <box
+      homogeneous
+      spacing={6}
+      onDestroy={() => {
+        wifiSsid.drop();
+        deviceConnected.drop();
+      }}
+    >
+      <ArrowButton
+        icon={bind(wifi, "iconName")}
+        title="Wi-Fi"
+        subtitle={wifiSsid()}
+        onClicked={() => wifi.set_enabled(!wifi.get_enabled())}
+        onArrowClicked={() => {
+          wifi.scan();
+          qsPage.set("wifi");
+        }}
+        connection={[wifi, "enabled"]}
+      />
+      <ArrowButton
+        icon={bind(btAdapter, "powered").as(
+          (p) => `bluetooth-${p ? "" : "disabled-"}symbolic`,
+        )}
+        title="Bluetooth"
+        subtitle={deviceConnected()}
+        onClicked={() => bluetooth.toggle()}
+        onArrowClicked={() => console.log("Will add bt page later")}
+        connection={[btAdapter, "powered"]}
+      />
+    </box>
+  );
+}
+
+function MainPage() {
+  return (
+    <box cssClasses={["qs-page"]} name={"main"} vertical spacing={6}>
+      <Header />
       <Gtk.Separator />
-      <box vertical spacing={6}>
-        {powerprofiles.get_profiles().map((p) => {
-          return (
-            <button
-              cssClasses={bind(powerprofiles, "activeProfile").as((active) => {
-                const classes = ["profile"];
-                active === p.profile && classes.push("active");
-                return classes;
-              })}
-              onClicked={() => {
-                powerprofiles.set_active_profile(p.profile);
-                qsPage.set("main");
-              }}
-            >
-              <box>
-                <image iconName={`power-profile-${p.profile}-symbolic`} />
-                <label
-                  label={p.profile
-                    .split("-")
-                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(" ")}
-                />
-              </box>
-            </button>
-          );
-        })}
-      </box>
+      <WifiBluetooth />
+      <QSButtons />
+      <BrightnessBox />
+      <VolumeBox />
     </box>
   );
 }
@@ -160,14 +218,17 @@ function QSWindow(_gdkmonitor: Gdk.Monitor) {
       <box
         cssClasses={["window-content", "qs-container"]}
         hexpand={false}
+        vexpand={false}
         vertical
       >
         <stack
           visibleChildName={qsPage()}
           transitionType={Gtk.StackTransitionType.SLIDE_LEFT_RIGHT}
         >
-          <Main />
-          <Battery />
+          <MainPage />
+          <BatteryPage />
+          <SpeakerPage />
+          <WifiPage />
         </stack>
       </box>
     </PopupWindow>

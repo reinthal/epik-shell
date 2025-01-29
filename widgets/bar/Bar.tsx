@@ -11,6 +11,7 @@ import options from "../../options";
 import { idle } from "astal";
 import { windowAnimation } from "../../utils/hyprland";
 import { WindowProps } from "astal/gtk4/widget";
+import TrayPanelButton from "./TrayPanelButton";
 
 const { bar } = options;
 const { start, center, end } = bar;
@@ -75,15 +76,17 @@ function Bar({ gdkmonitor, ...props }: BarProps) {
   return (
     <window
       visible
+      setup={(self) => {
+        // problem when change bar size via margin/padding live
+        // https://github.com/wmww/gtk4-layer-shell/issues/60
+        self.set_default_size(1, 1);
+      }}
       name={"bar"}
       namespace={"bar"}
       gdkmonitor={gdkmonitor}
       anchor={anc | LEFT | RIGHT}
       exclusivity={Astal.Exclusivity.EXCLUSIVE}
       application={App}
-      // https://github.com/wmww/gtk4-layer-shell/issues/60
-      defaultHeight={-1}
-      defaultWidth={8000}
       {...props}
     >
       <centerbox cssClasses={["bar-container"]}>
@@ -100,6 +103,8 @@ export default function (gdkmonitor: Gdk.Monitor) {
 
   bar.position.subscribe(() => {
     App.toggle_window("bar");
+    const barWindow = App.get_window("bar")!;
+    barWindow.set_child(null);
     App.remove_window(App.get_window("bar")!);
     idle(() => {
       <Bar gdkmonitor={gdkmonitor} animation="slide top" />;

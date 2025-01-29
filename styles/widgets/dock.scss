@@ -48,11 +48,11 @@
     }
 
     .indicator {
-      min-width: 5px;
-      min-height: 5px;
+      min-width: 4px;
+      min-height: 4px;
       border-radius: 99px;
       background-color: $fg;
-      margin-bottom: 1px;
+      margin-bottom: 3px;
       transition: min-width 0.4s ease-in-out;
     }
   }
