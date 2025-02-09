@@ -6,7 +6,11 @@ export default function BrightnessBox() {
   const brightness = Brightness.get_default();
 
   return (
-    <box cssClasses={["qs-box", "brightness-box"]} valign={Gtk.Align.CENTER}>
+    <box
+      cssClasses={["qs-box", "brightness-box"]}
+      valign={Gtk.Align.CENTER}
+      spacing={10}
+    >
       <image
         iconName={"display-brightness-symbolic"}
         valign={Gtk.Align.CENTER}

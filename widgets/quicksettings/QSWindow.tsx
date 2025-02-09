@@ -39,6 +39,7 @@ function QSButtons() {
   return (
     <FlowBox
       maxChildrenPerLine={3}
+      activateOnSingleClick={false}
       homogeneous
       rowSpacing={6}
       columnSpacing={6}
@@ -138,6 +139,32 @@ function ArrowButton<T extends GObject.Object>({
   );
 }
 
+function WifiArrowButton() {
+  const wifi = AstalNetwork.get_default().wifi;
+  const wifiSsid = Variable.derive(
+    [bind(wifi, "state"), bind(wifi, "ssid")],
+    (state, ssid) => {
+      return state == AstalNetwork.DeviceState.ACTIVATED
+        ? ssid
+        : AstalNetwork.device_state_to_string();
+    },
+  );
+
+  return (
+    <ArrowButton
+      icon={bind(wifi, "iconName")}
+      title="Wi-Fi"
+      subtitle={wifiSsid()}
+      onClicked={() => wifi.set_enabled(!wifi.get_enabled())}
+      onArrowClicked={() => {
+        wifi.scan();
+        qsPage.set("wifi");
+      }}
+      connection={[wifi, "enabled"]}
+    />
+  );
+}
+
 function WifiBluetooth() {
   const bluetooth = AstalBluetooth.get_default();
   const btAdapter = bluetooth.adapter;
@@ -150,36 +177,17 @@ function WifiBluetooth() {
       return "No device";
     },
   );
-
   const wifi = AstalNetwork.get_default().wifi;
-  const wifiSsid = Variable.derive(
-    [bind(wifi, "state"), bind(wifi, "ssid")],
-    (state, ssid) => {
-      return state == AstalNetwork.DeviceState.ACTIVATED
-        ? ssid
-        : AstalNetwork.device_state_to_string();
-    },
-  );
+
   return (
     <box
       homogeneous
       spacing={6}
       onDestroy={() => {
-        wifiSsid.drop();
         deviceConnected.drop();
       }}
     >
-      <ArrowButton
-        icon={bind(wifi, "iconName")}
-        title="Wi-Fi"
-        subtitle={wifiSsid()}
-        onClicked={() => wifi.set_enabled(!wifi.get_enabled())}
-        onArrowClicked={() => {
-          wifi.scan();
-          qsPage.set("wifi");
-        }}
-        connection={[wifi, "enabled"]}
-      />
+      {wifi && <WifiArrowButton />}
       <ArrowButton
         icon={bind(btAdapter, "powered").as(
           (p) => `bluetooth-${p ? "" : "disabled-"}symbolic`,

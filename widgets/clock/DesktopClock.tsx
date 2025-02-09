@@ -75,6 +75,7 @@ export default function DesktopClock(_gdkmonitor: Gdk.Monitor) {
       }}
       visible
       layer={Astal.Layer.BOTTOM}
+      gdkmonitor={_gdkmonitor}
       name={"clock"}
       namespace={"clock"}
       anchor={options.desktop_clock.position(handlePos)}

@@ -43,4 +43,9 @@ function windowBlur() {
 export default function initHyprland() {
   windowAnimation();
   windowBlur();
+
+  hyprland.connect("config-reloaded", () => {
+    windowAnimation();
+    windowBlur();
+  });
 }

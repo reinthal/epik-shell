@@ -19,31 +19,6 @@ const updateVisibility = () => {
 
 export const dockVisible = Variable(updateVisibility());
 
-const widthVar = Variable(0);
-const heightVar = Variable(0);
-const getSize = (win: Gtk.Window) => win.get_child()!.get_preferred_size()[0];
-const getHoverHeight = () => {
-  const pos = dock.position.get() == "top" ? 0 : 2;
-  const hyprlandGapsOut = hyprland
-    .message("getoption general:gaps_out")
-    .split("\n")[0]
-    .split("custom type: ")[1]
-    .split(" ")
-    .map((e) => parseInt(e));
-  return hyprlandGapsOut.length >= 3
-    ? hyprlandGapsOut[pos]
-    : hyprlandGapsOut[0];
-};
-function setHoverSize() {
-  const dockWindow = App.get_window("dock");
-  const size = getSize(dockWindow!);
-
-  widthVar.set(size!.width);
-  heightVar.set(
-    getHoverHeight() > size!.height ? size!.height : getHoverHeight(),
-  );
-}
-
 // transparent window to detect hover
 function DockHover(_gdkmonitor: Gdk.Monitor) {
   const anchor = dock.position.get() == "top" ? TOP : BOTTOM;
@@ -125,6 +100,32 @@ function Dock({ gdkmonitor, ...props }: DockProps) {
         <box hexpand />
       </box>
     </window>
+  );
+}
+
+const widthVar = Variable(0);
+const heightVar = Variable(0);
+const getSize = (win: Gtk.Window) => win.get_child()!.get_preferred_size()[0];
+const getHoverHeight = () => {
+  const pos = dock.position.get() == "top" ? 0 : 2;
+  const hyprlandGapsOut = hyprland
+    .message("getoption general:gaps_out")
+    .split("\n")[0]
+    .split("custom type: ")[1]
+    .split(" ")
+    .map((e) => parseInt(e));
+  return hyprlandGapsOut.length >= 3
+    ? hyprlandGapsOut[pos]
+    : hyprlandGapsOut[0];
+};
+
+function setHoverSize() {
+  const dockWindow = App.get_window("dock");
+  const size = getSize(dockWindow!);
+
+  widthVar.set(size!.width);
+  heightVar.set(
+    getHoverHeight() > size!.height ? size!.height : getHoverHeight(),
   );
 }
 

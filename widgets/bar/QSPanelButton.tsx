@@ -22,7 +22,10 @@ export default function QSPanelButton() {
       bind(network.wired, "iconName"),
     ],
     (primary, wifiIcon, wiredIcon) => {
-      if (primary == AstalNetwork.Primary.WIRED) {
+      if (
+        primary == AstalNetwork.Primary.WIRED ||
+        primary == AstalNetwork.Primary.UNKNOWN
+      ) {
         return wiredIcon;
       } else {
         return wifiIcon;

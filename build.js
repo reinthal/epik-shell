@@ -21,6 +21,23 @@ const outfile = `${GLib.get_user_runtime_dir()}/epikshell.js`;
 
 //bundle js
 try {
+  //GLib.setenv("NODE_ENV", "production", true);
+  //await execAsync([
+  //  "bun",
+  //  "build",
+  //  entry,
+  //  "--outfile",
+  //  outfile,
+  //  "--external",
+  //  "gi://*",
+  //  "--external",
+  //  "system",
+  //  "--define",
+  //  `SRC=${currentDir}`,
+  //  "--target",
+  //  "bun",
+  //]);
+
   await execAsync([
     "esbuild",
     "--bundle",

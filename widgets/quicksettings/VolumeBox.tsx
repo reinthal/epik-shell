@@ -7,7 +7,11 @@ export default function VolumeBox() {
   const speaker = AstalWp.get_default()?.audio!.defaultSpeaker!;
 
   return (
-    <box cssClasses={["qs-box", "volume-box"]} valign={Gtk.Align.CENTER}>
+    <box
+      cssClasses={["qs-box", "volume-box"]}
+      valign={Gtk.Align.CENTER}
+      spacing={10}
+    >
       <image iconName={bind(speaker, "volumeIcon")} valign={Gtk.Align.CENTER} />
       <slider
         onChangeValue={(self) => {
