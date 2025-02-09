@@ -8,14 +8,9 @@ import AstalPowerProfiles from "gi://AstalPowerProfiles";
 import AstalNetwork from "gi://AstalNetwork";
 import AstalBluetooth from "gi://AstalBluetooth";
 
-export default function QSPanelButton() {
-  const battery = AstalBattery.get_default();
-  const bluetooth = AstalBluetooth.get_default();
-  const wp = AstalWp.get_default();
-  const speaker = wp?.audio.defaultSpeaker!;
-  const powerprofile = AstalPowerProfiles.get_default();
+function NetworkIcon() {
   const network = AstalNetwork.get_default();
-  const networkIcon = Variable.derive(
+  const icon = Variable.derive(
     [
       bind(network, "primary"),
       bind(network.wifi, "iconName"),
@@ -32,6 +27,16 @@ export default function QSPanelButton() {
       }
     },
   );
+  return <image iconName={icon()} onDestroy={() => icon.drop()} />;
+}
+
+export default function QSPanelButton() {
+  const battery = AstalBattery.get_default();
+  const bluetooth = AstalBluetooth.get_default();
+  const wp = AstalWp.get_default();
+  const speaker = wp?.audio.defaultSpeaker!;
+  const powerprofile = AstalPowerProfiles.get_default();
+  const network = AstalNetwork.get_default();
 
   return (
     <PanelButton
@@ -41,7 +46,7 @@ export default function QSPanelButton() {
       }}
     >
       <box spacing={6}>
-        <image iconName={networkIcon()} onDestroy={() => networkIcon.drop()} />
+        {(network.wifi != null || network.wired != null) && <NetworkIcon />}
         <image
           visible={bind(bluetooth, "isPowered")}
           iconName={"bluetooth-symbolic"}
