@@ -10,6 +10,9 @@ import AstalBluetooth from "gi://AstalBluetooth";
 
 function NetworkIcon() {
   const network = AstalNetwork.get_default();
+  if (!network.wifi)
+    return <image iconName={bind(network.wired, "iconName")} />;
+
   const icon = Variable.derive(
     [
       bind(network, "primary"),
@@ -36,7 +39,6 @@ export default function QSPanelButton() {
   const wp = AstalWp.get_default();
   const speaker = wp?.audio.defaultSpeaker!;
   const powerprofile = AstalPowerProfiles.get_default();
-  const network = AstalNetwork.get_default();
 
   return (
     <PanelButton
@@ -46,7 +48,7 @@ export default function QSPanelButton() {
       }}
     >
       <box spacing={6}>
-        {(network.wifi != null || network.wired != null) && <NetworkIcon />}
+        <NetworkIcon />
         <image
           visible={bind(bluetooth, "isPowered")}
           iconName={"bluetooth-symbolic"}

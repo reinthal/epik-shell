@@ -187,7 +187,7 @@ function WifiBluetooth() {
         deviceConnected.drop();
       }}
     >
-      {wifi != null && <WifiArrowButton />}
+      {!!wifi && <WifiArrowButton />}
       <ArrowButton
         icon={bind(btAdapter, "powered").as(
           (p) => `bluetooth-${p ? "" : "disabled-"}symbolic`,
