@@ -26,9 +26,16 @@ export default function WifiPage() {
       <Gtk.Separator />
       <Gtk.ScrolledWindow vexpand>
         <box vertical spacing={6}>
-          {bind(wifi, "accessPoints").as((aps) =>
-            aps
-              .filter((ap) => !!ap.ssid)
+          {bind(wifi, "accessPoints").as((aps) => {
+            const seenSsids = new Set();
+            return aps
+              .filter((ap) => {
+                if (seenSsids.has(ap.ssid)) {
+                  return false;
+                }
+                seenSsids.add(ap.ssid);
+                return !!ap.ssid;
+              })
               .map((accessPoint) => {
                 return (
                   <button
@@ -47,8 +54,8 @@ export default function WifiPage() {
                     </box>
                   </button>
                 );
-              }),
-          )}
+              });
+          })}
         </box>
       </Gtk.ScrolledWindow>
     </box>
